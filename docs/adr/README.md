@@ -11,3 +11,4 @@
 | [ADR-LP-07](ADR-LP-07-gtm-consent-mode.md) | GTM + Consent Mode v2 com banner LGPD | Aceita |
 | [ADR-LP-08](ADR-LP-08-decisoes-da-fase-0.md) | Decisões de implementação da Fase 0 | Aceita |
 | [ADR-LP-09](ADR-LP-09-decisoes-da-fase-1.md) | Decisões de implementação da Fase 1 | Aceita |
+| [ADR-LP-10](ADR-LP-10-decisoes-da-fase-2.md) | Decisões de implementação da Fase 2 (tour) | Aceita |

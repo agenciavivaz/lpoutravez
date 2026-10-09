@@ -130,6 +130,95 @@ export const copy = {
     subtitle: 'Telas reais do Outra Vez. Os números são de uma loja de exemplo.',
     cta: 'Quero ver com os meus números',
     sampleLabel: 'Dados de uma loja de exemplo.',
+    tabs: [
+      {
+        id: 'inicio',
+        label: 'Início',
+        title: 'Quanto voltou, num relance.',
+        text: 'A primeira tela mostra o que interessa: quanto seus clientes compraram de novo e quem está na hora de comprar.',
+        hotspots: [
+          {
+            title: 'Vendas geradas pelo Outra Vez',
+            text: 'pedidos de quem recebeu sua mensagem e comprou de novo.',
+          },
+          {
+            title: 'Do WhatsApp encontrado à recompra',
+            text: 'o funil mostra onde cada cliente está.',
+          },
+          { title: 'Oportunidade do dia', text: 'clientes na hora de repor um produto.' },
+        ],
+      },
+      {
+        id: 'clientes',
+        label: 'Clientes',
+        title: 'Cada comprador vira um cliente de verdade.',
+        text: 'Mesmo CPF em canais diferentes vira uma ficha só, com tudo que ele já comprou e cada mensagem que recebeu.',
+        hotspots: [
+          { title: 'Um cliente, vários canais', text: 'comprou no Mercado Livre e na Shopee.' },
+          // PRD 7.5 diz "segmento", proibido pelo glossário 4.5 → ADR-LP-10.
+          { title: 'Quanto vale esse cliente', text: 'total gasto, pedidos e tipo de cliente.' },
+          {
+            title: 'Tudo que aconteceu',
+            text: 'pedidos, mensagens e a recompra na linha do tempo.',
+          },
+        ],
+      },
+      {
+        id: 'reguas',
+        label: 'Réguas',
+        title: 'A mensagem certa na hora certa, sozinha.',
+        text: 'Você liga uma régua pronta e ela cuida do resto. Nenhuma oferta sai para quem não aceitou receber.',
+        hotspots: [
+          { title: 'O gatilho', text: 'quando o cliente está perto da próxima compra prevista.' },
+          { title: 'A regra de ouro', text: 'só segue quem aceitou novidades.' },
+          { title: 'Sai sozinho', text: 'quem compra de novo deixa de receber.' },
+        ],
+      },
+      {
+        id: 'whatsapp',
+        label: 'WhatsApp',
+        title: 'O que seu cliente recebe.',
+        text: 'Mensagens curtas, com o nome da sua loja, sobre o pedido que ele fez. E sempre com uma saída fácil.',
+        hotspots: [
+          { title: 'Começa pelo pedido', text: 'aviso útil, não propaganda.' },
+          { title: 'Pede permissão', text: 'o cliente escolhe se quer novidades.' },
+          { title: 'Saída fácil', text: 'responder SAIR para tudo na hora.' },
+        ],
+      },
+      {
+        id: 'envio',
+        label: 'Envio em massa',
+        title: 'Você sabe o custo antes de enviar.',
+        text: 'Antes de qualquer envio em massa, o Outra Vez mostra quanto vai custar e quem fica de fora — e por quê.',
+        hotspots: [
+          { title: 'Quantos recebem', text: 'só quem pode receber.' },
+          { title: 'Quanto custa', text: 'valor estimado no WhatsApp.' },
+          { title: 'Quem fica de fora', text: 'e o motivo.' },
+        ],
+      },
+      {
+        id: 'bling',
+        label: 'Bling',
+        title: 'Conecta em minutos. Não mexe em nada.',
+        text: 'Você autoriza o Bling uma vez. Os primeiros clientes aparecem em minutos e o histórico continua chegando em segundo plano.',
+        hotspots: [
+          { title: 'Um clique', text: 'conexão oficial com o Bling.' },
+          { title: 'Só leitura', text: 'não alteramos nada no seu Bling.' },
+          { title: 'Já dá pra usar', text: 'sem esperar o histórico inteiro.' },
+        ],
+      },
+    ],
+    // Rótulos de interface do tour que o PRD 7.2 descreve sem texto literal.
+    ui: {
+      tabsLabel: 'Telas do Outra Vez',
+      deviceLabel: 'Ver em',
+      mobile: 'Celular',
+      desktop: 'Computador',
+      themeLabel: 'Tema da tela',
+      light: 'Claro',
+      dark: 'Escuro',
+      hotspot: 'Marcador',
+    },
   },
 
   benefits: {

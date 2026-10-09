@@ -28,11 +28,19 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - Verificado: lint, typecheck, 9 testes unitários (incluindo "todo texto existe literalmente no PRD"), build, 22 testes E2E (sem rolagem horizontal de 360 a 1440, axe sem violações em 360/768/1440, toque ≥ 44 px, FAQ, comparação, barra mobile, reduced motion, nenhuma imagem além do logo). Lighthouse local (mobile): desempenho 94, acessibilidade 100, LCP 1,9 s, CLS 0.
 - JS inicial da home: 146 KB (limite 150 KB). Tour, simulador e formulário entram com carregamento tardio.
 
+## Fase 2 — Conheça por dentro ✅
+- `lib/mock/loja-exemplo.ts` com os dados da 7.5 (testes: barras = R$ 4.820; pedidos da Maria = R$ 842,30; R$ 398,91 = 1.240 × R$ 0,3217; percentuais e funil coerentes).
+- 13 componentes novos em `components/outra-vez/` (ver ADR-LP-10), claro e escuro.
+- Tour: 6 abas × celular/computador × claro/escuro, marcadores ①②③ sincronizados com a legenda (hover/foco/toque com balão), WhatsApp sempre no celular, `inert` + `aria-label` completo, abas com setas, rótulo "Dados de uma loja de exemplo." sempre visível.
+- Carregamento tardio: aba Início estática no HTML; JS do tour só perto da viewport. JS inicial da home: 147 KB.
+- Verificado: lint, typecheck, 15 testes unitários, build, 32 testes E2E (incluindo CLS = 0 na troca, JS tardio, teclado, axe no tour claro/escuro).
+
 ## Pendências e perguntas abertas (PRD 17)
+- Aba Clientes, marcador ②: "segmento" trocado por "tipo de cliente" (glossário 4.5 vs. PRD 7.5) — confirmar a palavra.
 - Card "Eu mesmo faço a demo" (pergunta 4) — desligado até confirmar.
 - Programa piloto (pergunta 3) — `NEXT_PUBLIC_FEATURE_PILOT=false`.
 - CNPJ da Vivaz (rodapé) — Fase 6.
 - Links "Política de privacidade" e "Termos de uso" do rodapé apontam para páginas da Fase 4.
 - Cal.com, WhatsApp, Supabase — Fase 4. Domínio — Fase 6.
 
-## Próxima: Fase 2 — Conheça por dentro
+## Próxima: Fase 3 — Simulador

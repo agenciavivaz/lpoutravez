@@ -11,6 +11,12 @@ function allStrings(value: unknown): string[] {
 }
 
 const strings = allStrings(copy);
+
+/** Desvios conscientes do texto do PRD, cada um registrado em docs/adr/. */
+const DEVIATIONS = new Set([
+  // ADR-LP-10: PRD 7.5 usa "segmento", proibido pelo glossário 4.5.
+  'total gasto, pedidos e tipo de cliente.',
+]);
 const source = readFileSync(join(process.cwd(), 'lib/copy/pt-BR.ts'), 'utf8');
 
 describe('lib/copy/pt-BR.ts', () => {
@@ -58,12 +64,14 @@ describe('lib/copy/pt-BR.ts', () => {
       'kind',
       'cells',
       'a11y',
+      'ui',
       'whatsappMessage',
     ]);
     const missing: string[] = [];
     const walk = (value: unknown, path: string) => {
       if (typeof value === 'string') {
-        if (value.trim() && !prd.includes(value)) missing.push(`${path}: "${value}"`);
+        if (value.trim() && !prd.includes(value) && !DEVIATIONS.has(value))
+          missing.push(`${path}: "${value}"`);
         return;
       }
       if (Array.isArray(value)) return value.forEach((v, i) => walk(v, `${path}[${i}]`));

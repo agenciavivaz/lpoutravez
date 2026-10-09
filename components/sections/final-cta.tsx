@@ -17,7 +17,7 @@ export function FinalCta() {
       <Loop
         ringColor="rgb(255 255 255 / 0.12)"
         thickness={12}
-        className="absolute -bottom-52 -left-44 -z-10 size-[340px] sm:-bottom-72 sm:-left-28 sm:size-[460px]"
+        className="absolute -top-40 -right-40 -z-10 size-[340px] sm:-top-32 sm:-right-28 sm:size-[460px]"
       />
       <div className="mx-auto grid max-w-[1200px] gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:gap-x-16 lg:px-8 lg:py-24">
         <div className="lg:col-start-1 lg:row-start-1">

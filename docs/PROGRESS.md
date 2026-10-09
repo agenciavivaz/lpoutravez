@@ -76,4 +76,8 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - Links "Política de privacidade" e "Termos de uso" do rodapé apontam para páginas da Fase 4.
 - Cal.com, WhatsApp, Supabase — Fase 4. Domínio — Fase 6.
 
-## Próxima: Fase 6 — QA e lançamento (domínio e CNPJ pendentes)
+## Fase 6 — QA e lançamento (parcial)
+- ✅ `docs/RUNBOOK.md` (trocar textos, ligar/desligar simulador e piloto, pedidos de demo no CRM, exclusão de dados).
+- ✅ `docs/QA.md` com o checklist da seção 15 e o estado de cada item.
+- ✅ Revisão visual em 360, 768, 1024 e 1440; ajustes no rodapé (1024) e no laço da faixa final.
+- ⏳ Domínio, CNPJ, CRM (`DEMO_WEBHOOK_URL`), Cal.com, GTM, revisão jurídica e teste real ponta a ponta — ver `docs/QA.md`.

@@ -8,7 +8,14 @@ export type AnalyticsEvent =
   | { event: 'section_view'; section: string }
   | { event: 'tour_tab_view'; tab: string; device: 'mobile' | 'desktop'; theme: 'light' | 'dark' }
   | { event: 'tour_hotspot'; tab: string; hotspot: number }
-  | { event: 'simulator_change'; orders: number; ticket: number; rate: number }
+  | {
+      event: 'calc_interact' | 'calc_cta_click';
+      orders: number;
+      ticket: number;
+      category: string;
+      own_channel: number;
+    }
+  | { event: 'calc_category_change'; category: string }
   | { event: 'faq_open'; question_id: string }
   | { event: 'demo_form_start' }
   | { event: 'demo_form_step1' }

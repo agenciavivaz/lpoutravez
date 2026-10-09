@@ -8,7 +8,7 @@ import { ProductTourSection } from '@/components/sections/product-tour-section';
 import { Safety } from '@/components/sections/safety';
 import { Route } from '@/components/sections/route';
 import { Integrations } from '@/components/sections/integrations';
-import { SimulatorSection } from '@/components/sections/simulator-section';
+import { CalculatorSection } from '@/components/sections/calculator-section';
 import { Comparison } from '@/components/sections/comparison';
 import { Demo } from '@/components/sections/demo';
 import { Faq } from '@/components/sections/faq';
@@ -28,7 +28,7 @@ export default function Home() {
         <Problem />
         <HowItWorks />
         <Route />
-        {site.features.simulator ? <SimulatorSection /> : null}
+        {site.features.simulator ? <CalculatorSection /> : null}
         <ProductTourSection />
         <Safety />
         <Integrations />

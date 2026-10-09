@@ -26,7 +26,8 @@ export type DemoRequestPayload = {
     orders_range: string;
     erp: string;
     erp_other: string | null;
-    simulator_snapshot: { orders: number; ticket: number; rate: number } | null;
+    /** Campos ocultos da calculadora, quando a pessoa veio por ela. */
+    calculator: { calc_pedidos: number; calc_ticket: number; calc_categoria: string } | null;
   };
   attribution: Record<string, string>;
   user_agent: string | null;

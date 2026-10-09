@@ -327,39 +327,6 @@ export const copy = {
     },
   },
 
-  /** Simulador antigo (v1). Sai na etapa 3, quando a calculadora nova entra. */
-  simulator: {
-    eyebrow: 'Faça as contas',
-    h2: 'Quanto pode voltar para a sua loja em um ano?',
-    subtitle:
-      'É uma simulação com dados de mercado. Na demo, a gente refaz com os pedidos reais do seu ERP.',
-    inputs: {
-      orders: 'Pedidos por mês',
-      ticket: 'Ticket médio',
-      rate: 'Clientes que compram de novo depois das réguas',
-    },
-    outputs: {
-      revenue: 'Vendas que podem voltar por mês',
-      customers: 'Clientes que compram de novo',
-      cost: 'Custo estimado de Busca de WhatsApp e mensagens',
-      perReal: 'Para cada R$ 1 investido',
-      perRealSuffix: 'em vendas',
-    },
-    showMath: 'Ver as contas',
-    assumptionsHeader: { label: 'Premissa', value: 'Valor' },
-    assumptions: {
-      whatsappFound: 'Clientes com WhatsApp encontrado',
-      acceptNews: 'Clientes que aceitam novidades',
-      lookupPrice: 'Preço da Busca de WhatsApp por cliente',
-      utilityMessagePrice: 'Mensagem de aviso do pedido',
-      marketingMessagePrice: 'Mensagem de novidade',
-      marketingMessagesPerMonth: 'Mensagens de novidade por cliente que aceitou, por mês',
-    },
-    disclaimer:
-      'Simulação com premissas médias, não é promessa de resultado. Não inclui a assinatura do Outra Vez, apresentada na demo. Preços do WhatsApp definidos pela Meta e sujeitos a mudança.',
-    cta: 'Ver isso com os meus números',
-  },
-
   calculator: {
     eyebrow: 'Faça as contas',
     h2: 'Quanto pode voltar para a sua loja em um ano?',

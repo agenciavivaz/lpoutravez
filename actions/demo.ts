@@ -11,6 +11,7 @@ import {
   type FieldErrors,
   type StoreInput,
 } from '@/lib/validation/demo';
+import { CATEGORY_IDS } from '@/lib/calculator';
 import { forwardDemoRequest, type DemoRequestPayload } from '@/lib/crm/forward';
 
 /** Versão do texto da caixa de aceite (PRD 11.1, consent_text_version). */
@@ -85,7 +86,7 @@ export async function submitContact(
 export async function submitStore(
   contact: ContactInput,
   store: StoreInput,
-  simulator: { orders: number; ticket: number; rate: number } | null,
+  calculator: { orders: number; ticket: number; category: string } | null,
   meta: Meta,
 ): Promise<ActionResult<StoreInput>> {
   const errors = validateStore(store);
@@ -97,12 +98,18 @@ export async function submitStore(
   const next = qualified ? 'calendar' : 'waitlist';
   if (isBot(meta)) return { ok: true, next };
 
-  const snapshot =
-    simulator &&
-    [simulator.orders, simulator.ticket, simulator.rate].every(
+  // Campos ocultos da calculadora (PRD v2 8.6).
+  const calc =
+    calculator &&
+    [calculator.orders, calculator.ticket].every(
       (n) => typeof n === 'number' && Number.isFinite(n),
-    )
-      ? { orders: simulator.orders, ticket: simulator.ticket, rate: simulator.rate }
+    ) &&
+    (CATEGORY_IDS as readonly string[]).includes(calculator.category)
+      ? {
+          calc_pedidos: Math.round(calculator.orders),
+          calc_ticket: Math.round(calculator.ticket),
+          calc_categoria: calculator.category,
+        }
       : null;
 
   const payload: DemoRequestPayload = {
@@ -117,7 +124,7 @@ export async function submitStore(
       orders_range: store.ordersRange,
       erp: store.erp,
       erp_other: store.erp === 'outro' ? store.erpOther.trim().slice(0, 80) || null : null,
-      simulator_snapshot: snapshot,
+      calculator: calc,
     },
     attribution: cleanAttribution(meta.attribution),
     user_agent: (await headers()).get('user-agent'),

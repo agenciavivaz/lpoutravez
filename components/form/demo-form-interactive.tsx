@@ -6,7 +6,7 @@ import { copy, fill } from '@/lib/copy/pt-BR';
 import { maskPhoneInput } from '@/lib/phone';
 import { track } from '@/lib/analytics/events';
 import { captureAttribution, type Attribution } from '@/lib/utm';
-import { SIMULATOR_SNAPSHOT_KEY, ordersRange, type SimulatorInput } from '@/lib/simulator/calc';
+import { CALCULATOR_SNAPSHOT_KEY, ordersRange, type CalculatorSnapshot } from '@/lib/calculator';
 import {
   validateContact,
   validateStore,
@@ -82,7 +82,8 @@ export function DemoFormInteractive() {
   const [pending, setPending] = useState(false);
   const [formError, setFormError] = useState<string>();
   const [announce, setAnnounce] = useState('');
-  const simulator = useRef<SimulatorInput | null>(null);
+  /** Campos ocultos vindos da calculadora: calc_pedidos, calc_ticket, calc_categoria. */
+  const calculator = useRef<CalculatorSnapshot | null>(null);
   const attribution = useRef<Attribution>({});
   const started = useRef(false);
   const restored = useRef(false);
@@ -100,17 +101,17 @@ export function DemoFormInteractive() {
     } else {
       setRequestId(crypto.randomUUID());
     }
-    const applySnapshot = (snapshot: SimulatorInput | null) => {
+    const applySnapshot = (snapshot: CalculatorSnapshot | null) => {
       if (!snapshot) return;
-      simulator.current = snapshot;
+      calculator.current = snapshot;
       setStore((s) => ({ ...s, ordersRange: ordersRange(snapshot.orders) }));
     };
-    applySnapshot(readJson<SimulatorInput>(sessionStorage, SIMULATOR_SNAPSHOT_KEY));
+    applySnapshot(readJson<CalculatorSnapshot>(sessionStorage, CALCULATOR_SNAPSHOT_KEY));
     const onSnapshot = (event: Event) =>
-      applySnapshot((event as CustomEvent<SimulatorInput>).detail);
-    window.addEventListener('ov:simulator-snapshot', onSnapshot);
+      applySnapshot((event as CustomEvent<CalculatorSnapshot>).detail);
+    window.addEventListener('ov:calculator-snapshot', onSnapshot);
     restored.current = true;
-    return () => window.removeEventListener('ov:simulator-snapshot', onSnapshot);
+    return () => window.removeEventListener('ov:calculator-snapshot', onSnapshot);
   }, []);
 
   useEffect(() => {
@@ -173,7 +174,7 @@ export function DemoFormInteractive() {
     if (Object.keys(errors).length > 0) return focusFirstError('store', errors);
     setPending(true);
     try {
-      const result = await submitStore(contact, store, simulator.current, meta());
+      const result = await submitStore(contact, store, calculator.current, meta());
       if (!result.ok) {
         setStoreErrors(result.errors);
         if (Object.keys(result.errors).length === 0) setFormError(copy.form.ui.errors.generic);

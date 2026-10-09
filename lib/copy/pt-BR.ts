@@ -320,6 +320,15 @@ export const copy = {
       perRealSuffix: 'em vendas',
     },
     showMath: 'Ver as contas',
+    assumptionsHeader: { label: 'Premissa', value: 'Valor' },
+    assumptions: {
+      whatsappFound: 'Clientes com WhatsApp encontrado',
+      acceptNews: 'Clientes que aceitam novidades',
+      lookupPrice: 'Preço da Busca de WhatsApp por cliente',
+      utilityMessagePrice: 'Mensagem de aviso do pedido',
+      marketingMessagePrice: 'Mensagem de novidade',
+      marketingMessagesPerMonth: 'Mensagens de novidade por cliente que aceitou, por mês',
+    },
     disclaimer:
       'Simulação com premissas médias, não é promessa de resultado. Não inclui a assinatura do Outra Vez, apresentada na demo. Preços do WhatsApp definidos pela Meta e sujeitos a mudança.',
     cta: 'Ver isso com os meus números',

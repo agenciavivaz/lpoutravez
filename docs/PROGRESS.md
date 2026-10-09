@@ -35,7 +35,15 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - Carregamento tardio: aba Início estática no HTML; JS do tour só perto da viewport. JS inicial da home: 147 KB.
 - Verificado: lint, typecheck, 15 testes unitários, build, 32 testes E2E (incluindo CLS = 0 na troca, JS tardio, teclado, axe no tour claro/escuro).
 
+## Fase 3 — Simulador ✅
+- `lib/simulator/config.ts` (premissas editáveis) + `calc.ts`; teste reproduz o exemplo da 8.3.
+- UI com slider + campo numérico sincronizados, rótulos visíveis, "Ver as contas" com a tabela de premissas, aviso fixo, contagem de 400 ms (sem animação com reduced motion).
+- CTA "Ver isso com os meus números" leva os valores para o formulário (sessionStorage).
+- Flag `NEXT_PUBLIC_FEATURE_SIMULATOR` (padrão `true`). Carregamento tardio com os padrões já no HTML.
+- Verificado: lint, typecheck, 18 testes unitários, build, 38 testes E2E (padrões R$ 5.400 / 36 / R$ 835,02 / R$ 6,47, teclado nos sliders, digitação, passagem de valores, axe).
+
 ## Pendências e perguntas abertas (PRD 17)
+- Preço do crédito (R$ 0,30) e preços da Meta no simulador (pergunta 8) — confirmar antes do lançamento.
 - Aba Clientes, marcador ②: "segmento" trocado por "tipo de cliente" (glossário 4.5 vs. PRD 7.5) — confirmar a palavra.
 - Card "Eu mesmo faço a demo" (pergunta 4) — desligado até confirmar.
 - Programa piloto (pergunta 3) — `NEXT_PUBLIC_FEATURE_PILOT=false`.
@@ -43,4 +51,4 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - Links "Política de privacidade" e "Termos de uso" do rodapé apontam para páginas da Fase 4.
 - Cal.com, WhatsApp, Supabase — Fase 4. Domínio — Fase 6.
 
-## Próxima: Fase 3 — Simulador
+## Próxima: Fase 4 — Formulário, agendamento e dados (bloqueada: Cal.com, WhatsApp, Supabase)

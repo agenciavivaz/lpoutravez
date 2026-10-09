@@ -12,3 +12,4 @@
 | [ADR-LP-08](ADR-LP-08-decisoes-da-fase-0.md) | Decisões de implementação da Fase 0 | Aceita |
 | [ADR-LP-09](ADR-LP-09-decisoes-da-fase-1.md) | Decisões de implementação da Fase 1 | Aceita |
 | [ADR-LP-10](ADR-LP-10-decisoes-da-fase-2.md) | Decisões de implementação da Fase 2 (tour) | Aceita |
+| [ADR-LP-11](ADR-LP-11-decisoes-da-fase-3.md) | Decisões de implementação da Fase 3 (simulador) | Aceita |

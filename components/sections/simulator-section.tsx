@@ -1,9 +1,19 @@
 import { copy } from '@/lib/copy/pt-BR';
+import { inputs } from '@/lib/simulator/config';
+import { simulate } from '@/lib/simulator/calc';
 import { Section, SectionHeading } from '@/components/section';
+import { SimulatorLoader } from '@/components/simulator/simulator-loader';
+import { SimulatorView } from '@/components/simulator/simulator-view';
 
-/** Faixa "Quanto pode voltar" (ink-900). O simulador entra na Fase 3 (PRD 8). */
+/** Faixa "Quanto pode voltar" (ink-900, PRD 8). Desligável por NEXT_PUBLIC_FEATURE_SIMULATOR. */
 export function SimulatorSection() {
   const t = copy.simulator;
+  const values = {
+    orders: inputs.orders.default,
+    ticket: inputs.ticket.default,
+    rate: inputs.rate.default,
+  };
+  const result = simulate(values);
   return (
     <Section id="simulador" labelledBy="simulador-title" className="bg-ink-900 text-white">
       <SectionHeading
@@ -13,11 +23,11 @@ export function SimulatorSection() {
         subtitle={t.subtitle}
         tone="dark"
       />
-      <div
-        aria-hidden
-        data-slot="simulator-placeholder"
-        className="mt-10 min-h-[900px] rounded-[28px] border border-white/10 bg-white/[0.04] lg:min-h-[480px]"
-      />
+      <div className="mt-10">
+        <SimulatorLoader>
+          <SimulatorView values={values} display={result} />
+        </SimulatorLoader>
+      </div>
     </Section>
   );
 }

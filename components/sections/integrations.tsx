@@ -3,6 +3,7 @@ import { copy } from '@/lib/copy/pt-BR';
 import { ERPS } from '@/lib/brands';
 import { cn } from '@/lib/utils';
 import { Section, SectionHeading } from '@/components/section';
+import { BrandMark } from '@/components/brand-mark';
 import { ErpOtherLink } from './erp-other-link';
 
 /** Integrações (PRD v2 6 e 9.9): Bling ativo, demais ERPs e hubs com API na implantação. */
@@ -26,9 +27,7 @@ export function Integrations() {
               erp.active ? 'border-ink-900 border-2' : 'border-border',
             )}
           >
-            <span className="text-muted-foreground flex h-7 items-center text-lg font-extrabold">
-              {erp.name}
-            </span>
+            <BrandMark brand={erp} className="h-7" />
             <span
               className={cn(
                 'inline-flex items-center gap-1.5 text-xs font-bold',

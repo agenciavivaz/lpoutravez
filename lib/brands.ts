@@ -1,16 +1,18 @@
 /**
  * Marcas citadas na LP (PRD v2 6 e 7). Nomes próprios, não são copy.
- * `logo`: arquivo monocromático em /public/logos/ (currentColor). Sem logo, a LP mostra o nome.
+ * `logo`: símbolo monocromático em /public/logos/ (PRD v2 7). Sempre aparece ao lado do nome.
+ * Sem SVG confiável (kit de imprensa ou Simple Icons), a LP mostra só o nome, no mesmo estilo.
+ * Pendências de SVG: Mercado Livre, Amazon, Magalu, Shein e todos os ERPs (ver docs/PROGRESS.md).
  */
 
 export type Brand = { id: string; name: string; logo: string | null };
 
 export const MARKETPLACES: Brand[] = [
   { id: 'mercado-livre', name: 'Mercado Livre', logo: null },
-  { id: 'shopee', name: 'Shopee', logo: null },
+  { id: 'shopee', name: 'Shopee', logo: '/logos/marketplaces/shopee.svg' },
   { id: 'amazon', name: 'Amazon', logo: null },
   { id: 'magalu', name: 'Magalu', logo: null },
-  { id: 'tiktok-shop', name: 'TikTok Shop', logo: null },
+  { id: 'tiktok-shop', name: 'TikTok Shop', logo: '/logos/marketplaces/tiktok-shop.svg' },
   { id: 'shein', name: 'Shein', logo: null },
 ];
 

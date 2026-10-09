@@ -2,19 +2,27 @@ import { Info } from 'lucide-react';
 import { copy } from '@/lib/copy/pt-BR';
 import { Icon } from '@/components/icon';
 import { Section, SectionHeading } from '@/components/section';
+import { RouteDiagram } from './route-diagram';
 
 /** Rota de recompra (PRD v2 5.2 e 9.5): você decide para onde cada cliente volta. */
 export function Route() {
   const t = copy.route;
   return (
-    <Section id="rota-de-recompra" labelledBy="rota-title" className="bg-warm-100">
-      <SectionHeading id="rota-title" eyebrow={t.eyebrow} title={t.h2} subtitle={t.subtitle} />
+    <Section
+      id="rota-de-recompra"
+      labelledBy="rota-title"
+      className="bg-warm-50 border-border border-y"
+    >
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-16">
+        <SectionHeading id="rota-title" eyebrow={t.eyebrow} title={t.h2} subtitle={t.subtitle} />
+        <RouteDiagram />
+      </div>
       <ul className="mt-10 grid gap-4 md:grid-cols-3">
         {t.cards.map((card, index) => (
           <li
             key={card.id}
             data-route={card.id}
-            className="bg-card border-border flex flex-col rounded-[20px] border p-6"
+            className="bg-card border-border first:border-ink-900 flex flex-col rounded-[20px] border p-6 first:border-2"
           >
             <div className="flex items-center justify-between gap-3">
               <span className="bg-ink-50 text-ink-900 grid size-11 place-items-center rounded-[14px]">

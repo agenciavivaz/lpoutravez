@@ -77,6 +77,8 @@ export const copy = {
     ariaLabel: 'Marketplaces compatíveis',
     more: 'e outros canais do seu ERP',
     erp: 'Bling e outros ERPs com API',
+    // Rótulos do botão de pausa da rolagem (WCAG 2.2.2), sem texto literal no PRD.
+    ui: { pause: 'Pausar a rolagem dos logos', play: 'Retomar a rolagem dos logos' },
   },
 
   problem: {

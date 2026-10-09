@@ -1,34 +1,19 @@
-import { Check, Minus, X } from 'lucide-react';
 import { copy } from '@/lib/copy/pt-BR';
 import { cn } from '@/lib/utils';
 import { Section, SectionHeading } from '@/components/section';
-
-type Value = 'yes' | 'partial' | 'no';
+import { ComparisonCell, type ComparisonValue } from './comparison-cell';
+import { ComparisonTabs } from './comparison-tabs';
 
 const OURS = 3;
-
-function Cell({ value }: { value: Value }) {
-  const label = copy.comparison.values[value];
-  const Glyph = value === 'yes' ? Check : value === 'partial' ? Minus : X;
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1.5 font-bold',
-        value === 'yes' && 'text-success',
-        value === 'partial' && 'text-warning',
-        value === 'no' && 'text-muted-foreground',
-      )}
-    >
-      <Glyph className="size-4 shrink-0" aria-hidden />
-      {label}
-    </span>
-  );
-}
 
 export function Comparison() {
   const t = copy.comparison;
   return (
-    <Section id="comparacao" labelledBy="comparacao-title" className="bg-warm-100">
+    <Section
+      id="comparacao"
+      labelledBy="comparacao-title"
+      className="bg-warm-50 border-border border-y"
+    >
       <SectionHeading id="comparacao-title" eyebrow={t.eyebrow} title={t.h2} />
 
       {/* Desktop: tabela. */}
@@ -76,7 +61,7 @@ export function Comparison() {
                           ),
                       )}
                     >
-                      <Cell value={value as Value} />
+                      <ComparisonCell value={value as ComparisonValue} />
                     </td>
                   ))}
                 </tr>
@@ -86,37 +71,10 @@ export function Comparison() {
         </table>
       </div>
 
-      {/* Mobile: um card por coluna, sem rolagem horizontal. Outra Vez primeiro. */}
-      <ul className="mt-10 grid gap-4 md:grid-cols-2 lg:hidden">
-        {[OURS, 0, 1, 2].map((columnIndex) => {
-          const ours = columnIndex === OURS;
-          return (
-            <li
-              key={t.columns[columnIndex]}
-              className={cn(
-                'rounded-[20px] border p-5',
-                ours ? 'bg-ink-50 border-ink-900 border-2' : 'bg-card border-border',
-              )}
-            >
-              <h3
-                className={cn('text-lg font-extrabold', ours ? 'text-ink-900' : 'text-foreground')}
-              >
-                {t.columns[columnIndex]}
-              </h3>
-              <dl className="mt-3 grid gap-3">
-                {t.rows.map((row) => (
-                  <div key={row.label} className="border-border flex flex-col gap-1 border-t pt-3">
-                    <dt className="text-sm">{row.label}</dt>
-                    <dd className="text-sm">
-                      <Cell value={row.cells[columnIndex] as Value} />
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </li>
-          );
-        })}
-      </ul>
+      {/* Mobile e tablet: abas, Outra Vez contra uma alternativa por vez. */}
+      <div className="mt-10 lg:hidden">
+        <ComparisonTabs />
+      </div>
     </Section>
   );
 }

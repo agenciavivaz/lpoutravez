@@ -81,3 +81,21 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - ✅ `docs/QA.md` com o checklist da seção 15 e o estado de cada item.
 - ✅ Revisão visual em 360, 768, 1024 e 1440; ajustes no rodapé (1024) e no laço da faixa final.
 - ⏳ Domínio, CNPJ, CRM (`DEMO_WEBHOOK_URL`), Cal.com, GTM, revisão jurídica e teste real ponta a ponta — ver `docs/QA.md`.
+
+## Revisão v2 (PRD_LP_v2), 09/10/2026
+Branch `claude/beautiful-hawking-f9o6i9`, um commit por etapa. Detalhes em ADR-LP-14 e `docs/QA.md`.
+1. Copy da seção 9, zero travessão, teste contra o PRD v2.
+2. Nova ordem (9.1 a 9.14); Rota de recompra e Integrações; "O que muda" removida; tour em fundo claro.
+3. Calculadora anual (`lib/calculator.ts`), 5 casos da 8.5 passando.
+4. Faixa "Funciona com" e grid de ERPs com logos monocromáticos; exceção no `CLAUDE.md`.
+5. Design 360: arco do hero, linha do tempo com seta 5 → 3, diagrama da rota, faixa com rolagem pausável, comparação em abas.
+6. Form (site, ERP, pedidos, campos ocultos da calculadora), canonical, title/description, JSON-LD, OG, eventos.
+7. QA: 39 testes unitários, 64 E2E (axe incluído), Lighthouse 96/100/96/100.
+
+### Pendências da v2
+- Número do WhatsApp (`NEXT_PUBLIC_WHATSAPP_NUMBER`): sem ele, os links de WhatsApp ficam escondidos.
+- SVG de Mercado Livre, Amazon, Magalu, Shein e de todos os ERPs (Bling, Tiny, Omie, UpSeller, Anymarket, Magis5, Ideris, Eccosys): hoje aparecem como nome em texto.
+- Validação jurídica (PRD v2 12): termos dos marketplaces sobre uso de dados fora da plataforma (Rota de recompra), base legal da identificação por bases cadastrais (LGPD), diretrizes de marca de Mercado Livre, Shopee e Amazon (logos).
+- Premissa de captura de 35%: hipótese até termos dados dos 3 primeiros clientes.
+- Domínio `www.outravez.com.br` na Vercel (o canonical já aponta para ele).
+- "Segmento" do PRD v2 trocado por "lista de clientes" (glossário do DS): confirmar.

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ERPS, validateContact, validateStore } from '@/lib/validation/demo';
+import { whatsappHref } from '@/lib/site';
 import { maskPhoneInput, parseBrPhone } from '@/lib/phone';
 
 const okContact = {
@@ -58,5 +59,16 @@ describe('validação da etapa 2 (PRD v2 9.13)', () => {
 
   it('ERPs do select: Bling, Tiny, Omie, UpSeller, Outro', () => {
     expect(ERPS).toEqual(['bling', 'tiny', 'omie', 'upseller', 'outro']);
+  });
+});
+
+describe('link do WhatsApp (PRD v2 9.13)', () => {
+  it('leva o número e a mensagem; sem número, não existe', () => {
+    expect(whatsappHref('Oi, quero conhecer o Outra Vez', '5511987654321')).toBe(
+      'https://wa.me/5511987654321?text=Oi%2C%20quero%20conhecer%20o%20Outra%20Vez',
+    );
+    expect(whatsappHref('Oi', '+55 (11) 98765-4321')).toBe('https://wa.me/5511987654321?text=Oi');
+    expect(whatsappHref('Oi', null)).toBeNull();
+    expect(whatsappHref('Oi', '')).toBeNull();
   });
 });

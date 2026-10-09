@@ -36,7 +36,8 @@ for (const width of widths) {
     await page.waitForTimeout(800);
     // Header fixo e barra de CTA do mobile cobririam as capturas de cada seção.
     await page.addStyleTag({
-      content: 'header{position:static!important} [data-slot="mobile-cta-bar"]{display:none!important}',
+      content:
+        'header{position:static!important} [data-slot="mobile-cta-bar"]{display:none!important}',
     });
     const sections = await page.$$('main > section, main > div > section, footer');
     let index = 0;

@@ -45,12 +45,9 @@ async function fillContact(page: Page, name = 'Ana Teste') {
 }
 
 async function fillStore(page: Page, erp: string) {
-  await page.getByLabel('Nome da loja').fill('Loja da Ana');
-  await page.locator('#demo-marketplaces').getByText('Shopee', { exact: true }).click();
-  await page
-    .getByLabel('Quantos pedidos por mês, somando todos os canais?')
-    .selectOption('1000_3000');
+  await page.getByLabel(/Site ou loja/).fill('casalavanda.com.br');
   await page.getByLabel(erp, { exact: true }).check();
+  await page.locator('#demo-orders').selectOption('1000_3000');
 }
 
 test.describe('Fase 4 — formulário (sem banco, envio para o CRM)', () => {
@@ -85,7 +82,7 @@ test.describe('Fase 4 — formulário (sem banco, envio para o CRM)', () => {
       attribution: { utm_source: 'meta', utm_campaign: 'lancamento', landing_path: '/' },
     });
     const events = await page.evaluate(() => window.dataLayer?.map((e) => e.event));
-    expect(events).toContain('demo_form_step1');
+    expect(events).toContain('form_step1_submit');
     // Nada pessoal no dataLayer (PRD 12.2).
     expect(JSON.stringify(await page.evaluate(() => window.dataLayer))).not.toContain('ana@');
   });
@@ -102,7 +99,7 @@ test.describe('Fase 4 — formulário (sem banco, envio para o CRM)', () => {
     await expect(page.getByLabel('Seu nome')).toHaveValue('Ana Teste');
   });
 
-  test('Bling → qualified e calendário (sem Cal.com configurado mostra WhatsApp)', async ({
+  test('Bling → qualified e calendário (sem Cal.com mostra o aviso de contato)', async ({
     page,
   }) => {
     received.length = 0;
@@ -117,30 +114,47 @@ test.describe('Fase 4 — formulário (sem banco, envio para o CRM)', () => {
         'Não conseguimos abrir o calendário agora. A gente te chama no WhatsApp para marcar o horário.',
       ),
     ).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Falar no WhatsApp' })).toHaveAttribute(
-      'href',
-      /wa\.me/,
-    );
+    // Build sem NEXT_PUBLIC_WHATSAPP_NUMBER: nenhum link wa.me sem número.
+    await expect(page.locator('a[href^="https://wa.me/?"]')).toHaveCount(0);
     await expect.poll(() => received.map((p) => p.status)).toEqual(['started', 'qualified']);
     expect(received[1]?.store).toMatchObject({
-      store_name: 'Loja da Ana',
-      marketplaces: ['Shopee'],
+      site: 'casalavanda.com.br',
+      orders_range: '1000_3000',
+      erp: 'bling',
+      calculator: null,
+    });
+    const events = await page.evaluate(() => window.dataLayer ?? []);
+    expect(events).toContainEqual({
+      event: 'form_step2_submit',
       orders_range: '1000_3000',
       erp: 'bling',
     });
   });
 
-  test('Omie → lista de espera (status waitlist)', async ({ page }) => {
+  test('Omie também vai para o calendário (conectamos na implantação)', async ({ page }) => {
     received.length = 0;
     await openForm(page);
     await fillContact(page);
     await page.getByRole('button', { name: 'Continuar' }).click();
     await fillStore(page, 'Omie');
     await page.getByRole('button', { name: 'Escolher horário' }).click();
-    await expect(page).toHaveURL(/\/lista-de-espera\?erp=Omie$/);
-    await expect(page.getByRole('heading', { name: 'Você está na lista.' })).toBeVisible();
-    await expect(page.getByText('Assim que chegar ao Omie', { exact: false })).toBeVisible();
-    await expect.poll(() => received.map((p) => p.status)).toEqual(['started', 'waitlist']);
+    await expect(page.getByRole('heading', { name: 'Escolha o melhor horário' })).toBeVisible();
+    await expect.poll(() => received.map((p) => p.status)).toEqual(['started', 'qualified']);
+    expect(received[1]?.store).toMatchObject({ erp: 'omie' });
+  });
+
+  test('"Usa outro sistema? Me conta qual" marca o ERP "Outro"', async ({ page }) => {
+    await openForm(page);
+    await page
+      .locator('#integracoes')
+      .getByRole('link', { name: 'Usa outro sistema? Me conta qual' })
+      .click();
+    await fillContact(page);
+    await page.getByRole('button', { name: 'Continuar' }).click();
+    await expect(page.getByLabel('Outro', { exact: true })).toBeChecked();
+    await expect(page.getByLabel(/^Qual\?/)).toBeVisible();
+    const events = await page.evaluate(() => window.dataLayer?.map((e) => e.event));
+    expect(events).toContain('erp_other_click');
   });
 
   test('honeypot preenchido: avança mas não envia nada', async ({ page }) => {
@@ -154,33 +168,34 @@ test.describe('Fase 4 — formulário (sem banco, envio para o CRM)', () => {
     expect(received).toHaveLength(0);
   });
 
-  test('simulador pré-preenche "pedidos por mês"', async ({ page }) => {
+  test('calculadora pré-preenche pedidos e manda calc_pedidos, calc_ticket, calc_categoria', async ({
+    page,
+  }) => {
+    received.length = 0;
     await page.goto('/');
-    await page.locator('#simulador').scrollIntoViewIfNeeded();
-    await expect(page.locator('[data-simulator-ready]')).toHaveAttribute(
-      'data-simulator-ready',
+    await page.locator('#faca-as-contas').scrollIntoViewIfNeeded();
+    await expect(page.locator('[data-calculator-ready]')).toHaveAttribute(
+      'data-calculator-ready',
       'true',
     );
-    await page.locator('#sim-orders').fill('5000');
-    await page.locator('#sim-orders').press('Tab');
-    await page.getByRole('link', { name: 'Ver isso com os meus números' }).click();
+    await page.locator('#calc-orders').fill('5000');
+    await page.locator('#calc-orders').press('Tab');
+    await page
+      .locator('#faca-as-contas')
+      .locator('label', { hasText: 'Pet, alimentos e reposição' })
+      .click();
+    await page.getByRole('link', { name: 'Agendar demo com os meus números' }).click();
     await expect(page.locator('[data-form-ready]')).toHaveAttribute('data-form-ready', 'true');
     await page.waitForTimeout(3100);
     await fillContact(page);
     await page.getByRole('button', { name: 'Continuar' }).click();
-    await expect(page.getByLabel('Quantos pedidos por mês, somando todos os canais?')).toHaveValue(
-      '3000_10000',
-    );
-  });
-
-  test('link "Prefere falar pelo WhatsApp?" abre em nova aba', async ({ page }) => {
-    await page.goto('/');
-    const link = page.getByRole('link', { name: 'Prefere falar pelo WhatsApp?' });
-    await expect(link).toHaveAttribute('target', '_blank');
-    await expect(link).toHaveAttribute(
-      'href',
-      /^https:\/\/wa\.me\/\d*\?text=Oi%2C%20quero%20conhecer%20o%20Outra%20Vez$/,
-    );
+    await expect(page.locator('#demo-orders')).toHaveValue('3000_10000');
+    await page.getByLabel('Bling', { exact: true }).check();
+    await page.getByRole('button', { name: 'Escolher horário' }).click();
+    await expect.poll(() => received.length).toBe(2);
+    expect(received[1]?.store).toMatchObject({
+      calculator: { calc_pedidos: 5000, calc_ticket: 150, calc_categoria: 'reposicao' },
+    });
   });
 });
 
@@ -198,7 +213,7 @@ test.describe('Páginas de apoio', () => {
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
   });
 
-  for (const path of ['/privacidade', '/termos', '/lista-de-espera?erp=Tiny%2FOlist']) {
+  for (const path of ['/privacidade', '/termos']) {
     test(`${path} sem violações de axe e sem rolagem horizontal em 360px`, async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 800 });
       await page.goto(path);

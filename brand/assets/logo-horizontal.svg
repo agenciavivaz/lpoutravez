@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 108">
+<g transform="translate(0,6)">
+<circle cx="48" cy="48" r="46" fill="#1F2A6B"/>
+<path d="M66 31a26 26 0 1 0 4 30" fill="none" stroke="#F8F7F3" stroke-width="10" stroke-linecap="round"/>
+<path d="M69 18l2 25-23-8z" fill="#E85D4A"/>
+<circle cx="70" cy="61" r="5.5" fill="#E85D4A"/>
+</g>
+<text x="116" y="72" font-size="54" font-weight="700" font-family="Arial, sans-serif" fill="#1F2A6B">Outra Vez</text>
+</svg>

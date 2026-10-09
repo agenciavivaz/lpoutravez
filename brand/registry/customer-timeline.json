@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "customer-timeline",
+  "type": "registry:component",
+  "title": "Linha do tempo do cliente",
+  "description": "Eventos de pedido, mensagem, clique e recompra.",
+  "meta": {
+    "source": "Outra Vez Design System v2",
+    "implementation": "compose shadcn/ui + Lucide; see DESIGN_SYSTEM_SPEC.md"
+  }
+}

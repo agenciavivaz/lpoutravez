@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "type": "registry:component",
+  "title": "Estado vazio",
+  "description": "Ilustração leve, título, texto e uma ação.",
+  "meta": {
+    "source": "Outra Vez Design System v2",
+    "implementation": "compose shadcn/ui + Lucide; see DESIGN_SYSTEM_SPEC.md"
+  }
+}

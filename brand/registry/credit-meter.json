@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "credit-meter",
+  "type": "registry:component",
+  "title": "Medidor de créditos",
+  "description": "Saldo, dias estimados e ação para adicionar créditos.",
+  "meta": {
+    "source": "Outra Vez Design System v2",
+    "implementation": "compose shadcn/ui + Lucide; see DESIGN_SYSTEM_SPEC.md"
+  }
+}

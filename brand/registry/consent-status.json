@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "consent-status",
+  "type": "registry:component",
+  "title": "Status de consentimento",
+  "description": "Badge com ícone e texto para os estados de consentimento.",
+  "meta": {
+    "source": "Outra Vez Design System v2",
+    "implementation": "compose shadcn/ui + Lucide; see DESIGN_SYSTEM_SPEC.md"
+  }
+}

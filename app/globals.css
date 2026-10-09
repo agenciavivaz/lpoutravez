@@ -1,0 +1,257 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/*
+ * Tokens: espelho de brand/tokens.json (tests/unit/tokens.test.ts garante que os valores batem).
+ * Tema escuro por atributo: <html data-theme="dark"> ou qualquer contêiner com data-theme
+ * (o tour troca o tema só dentro da moldura).
+ */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  /* Primitivas 50–950 */
+  --color-ink-50: #eef0fb;
+  --color-ink-100: #dce1f7;
+  --color-ink-200: #c2caf0;
+  --color-ink-300: #9faae5;
+  --color-ink-400: #7484d6;
+  --color-ink-500: #5365c1;
+  --color-ink-600: #3f50a8;
+  --color-ink-700: #303f8c;
+  --color-ink-800: #263575;
+  --color-ink-900: #1f2a6b;
+  --color-ink-950: #141a45;
+
+  --color-coral-50: #fff1ed;
+  --color-coral-100: #ffe2da;
+  --color-coral-200: #ffc8bb;
+  --color-coral-300: #ffa18c;
+  --color-coral-400: #fa795d;
+  --color-coral-500: #e85d4a;
+  --color-coral-600: #c94636;
+  --color-coral-700: #a8372b;
+  --color-coral-800: #892f27;
+  --color-coral-900: #712b25;
+  --color-coral-950: #3d1411;
+
+  --color-warm-50: #fcfbf8;
+  --color-warm-100: #f8f7f3;
+  --color-warm-200: #f0eee8;
+  --color-warm-300: #e4e0d7;
+  --color-warm-400: #c5bfb4;
+  --color-warm-500: #9b9489;
+  --color-warm-600: #736d65;
+  --color-warm-700: #55514c;
+  --color-warm-800: #373531;
+  --color-warm-900: #242422;
+  --color-warm-950: #181817;
+
+  --color-success-50: #edf8f2;
+  --color-success-100: #d7f0e1;
+  --color-success-200: #afe0c5;
+  --color-success-300: #79c99e;
+  --color-success-400: #49ae79;
+  --color-success-500: #2f8f61;
+  --color-success-600: #23734e;
+  --color-success-700: #1e5c40;
+  --color-success-800: #1c4936;
+  --color-success-900: #193c2f;
+  --color-success-950: #0c2119;
+
+  --color-warning-50: #fff8e8;
+  --color-warning-100: #fceec8;
+  --color-warning-200: #f7dc92;
+  --color-warning-300: #efc55b;
+  --color-warning-400: #e5ae48;
+  --color-warning-500: #c98a1d;
+  --color-warning-600: #a86d0a;
+  --color-warning-700: #865407;
+  --color-warning-800: #6d430b;
+  --color-warning-900: #5b390d;
+  --color-warning-950: #321e04;
+
+  --color-danger-50: #fff0f1;
+  --color-danger-100: #ffe0e3;
+  --color-danger-200: #ffc5cb;
+  --color-danger-300: #f79aa5;
+  --color-danger-400: #f27a86;
+  --color-danger-500: #de5363;
+  --color-danger-600: #c43b4d;
+  --color-danger-700: #a52e40;
+  --color-danger-800: #892a3a;
+  --color-danger-900: #752837;
+  --color-danger-950: #41111b;
+
+  --color-info-50: #ecf8fc;
+  --color-info-100: #d7f0f8;
+  --color-info-200: #aee0f0;
+  --color-info-300: #7acde5;
+  --color-info-400: #58b6d8;
+  --color-info-500: #3294b7;
+  --color-info-600: #267797;
+  --color-info-700: #23617b;
+  --color-info-800: #225066;
+  --color-info-900: #204557;
+  --color-info-950: #0b2530;
+
+  /* Raio (tokens.json → radius) */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+
+  /* Movimento */
+  --ease-brand: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-micro: 150ms;
+  --duration-panel: 250ms;
+  --duration-celebration: 600ms;
+}
+
+@theme inline {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-money: var(--money);
+  --color-whatsapp: var(--whatsapp);
+}
+
+/* Semânticos — claro (tokens.json → semantic.light) */
+:root,
+[data-theme='light'] {
+  --background: #f8f7f3;
+  --foreground: #242422;
+  --card: #fcfbf8;
+  --card-foreground: #242422;
+  --popover: #fcfbf8;
+  --popover-foreground: #242422;
+  --primary: #1f2a6b;
+  --primary-foreground: #ffffff;
+  --secondary: #f0eee8;
+  --secondary-foreground: #373531;
+  --muted: #f0eee8;
+  --muted-foreground: #736d65;
+  --accent: #e85d4a;
+  --accent-foreground: #242422;
+  --destructive: #c43b4d;
+  --destructive-foreground: #ffffff;
+  --border: #e4e0d7;
+  --input: #e4e0d7;
+  --ring: #5365c1;
+  --success: #23734e;
+  --warning: #865407;
+  --info: #23617b;
+  --money: #1e5c40;
+  --whatsapp: #25d366;
+}
+
+/* Semânticos — escuro (tokens.json → semantic.dark) */
+[data-theme='dark'] {
+  --background: #181817;
+  --foreground: #f8f7f3;
+  --card: #242422;
+  --card-foreground: #f8f7f3;
+  --popover: #242422;
+  --popover-foreground: #f8f7f3;
+  --primary: #9faae5;
+  --primary-foreground: #141a45;
+  --secondary: #373531;
+  --secondary-foreground: #f8f7f3;
+  --muted: #373531;
+  --muted-foreground: #c5bfb4;
+  --accent: #fa795d;
+  --accent-foreground: #241512;
+  --destructive: #f27a86;
+  --destructive-foreground: #330e14;
+  --border: #55514c;
+  --input: #55514c;
+  --ring: #9faae5;
+  --success: #79c99e;
+  --warning: #efc55b;
+  --info: #7acde5;
+  --money: #79c99e;
+  --whatsapp: #25d366;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Eyebrow: coral-700 em fundo claro (≈ 6:1); em faixas escuras, `eyebrow-on-dark` usa coral-300. */
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--color-coral-700);
+  }
+  .eyebrow-on-dark {
+    color: var(--color-coral-300);
+  }
+  .display-h1 {
+    font-size: clamp(42px, 6vw, 82px);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+  }
+  .section-h2 {
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800;
+  }
+}

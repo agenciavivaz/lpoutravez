@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "customer-list-builder",
+  "type": "registry:component",
+  "title": "Construtor de lista",
+  "description": "Regras campo-operador-valor e contagem ao vivo.",
+  "meta": {
+    "source": "Outra Vez Design System v2",
+    "implementation": "compose shadcn/ui + Lucide; see DESIGN_SYSTEM_SPEC.md"
+  }
+}

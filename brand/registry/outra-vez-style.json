@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "outra-vez-style",
+  "type": "registry:style",
+  "title": "Outra Vez — Retorno quente",
+  "description": "Base visual do Outra Vez com tokens de marca e regras de produto.",
+  "cssVars": {
+    "light": {
+      "background": "#F8F7F3",
+      "foreground": "#242422",
+      "card": "#FCFBF8",
+      "card-foreground": "#242422",
+      "primary": "#1F2A6B",
+      "primary-foreground": "#FFFFFF",
+      "secondary": "#F0EEE8",
+      "secondary-foreground": "#373531",
+      "muted": "#F0EEE8",
+      "muted-foreground": "#736D65",
+      "accent": "#E85D4A",
+      "accent-foreground": "#242422",
+      "destructive": "#C43B4D",
+      "border": "#E4E0D7",
+      "input": "#E4E0D7",
+      "ring": "#5365C1"
+    },
+    "dark": {
+      "background": "#181817",
+      "foreground": "#F8F7F3",
+      "card": "#242422",
+      "card-foreground": "#F8F7F3",
+      "primary": "#9FAAE5",
+      "primary-foreground": "#141A45",
+      "secondary": "#373531",
+      "secondary-foreground": "#F8F7F3",
+      "muted": "#373531",
+      "muted-foreground": "#C5BFB4",
+      "accent": "#FA795D",
+      "accent-foreground": "#241512",
+      "destructive": "#F27A86",
+      "border": "#55514C",
+      "input": "#55514C",
+      "ring": "#9FAAE5"
+    }
+  }
+}

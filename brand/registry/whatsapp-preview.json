@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "whatsapp-preview",
+  "type": "registry:component",
+  "title": "Prévia de WhatsApp",
+  "description": "Preview controlado da mensagem, único lugar com verde WhatsApp.",
+  "meta": {
+    "source": "Outra Vez Design System v2",
+    "implementation": "compose shadcn/ui + Lucide; see DESIGN_SYSTEM_SPEC.md"
+  }
+}

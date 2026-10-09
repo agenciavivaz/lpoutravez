@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Outra Vez — Design System v2</title>
+<style>
+:root{
+  --bg:#F8F7F3;--surface:#FCFBF8;--surface2:#F0EEE8;--text:#242422;--muted:#736D65;--line:#E4E0D7;
+  --ink:#1F2A6B;--ink2:#303F8C;--inkSoft:#EEF0FB;--coral:#E85D4A;--coralSoft:#FFF1ED;
+  --success:#23734E;--warning:#865407;--danger:#C43B4D;--info:#23617B;--money:#1E5C40;--white:#fff;
+  --r1:6px;--r2:10px;--r3:14px;--r4:20px;--r5:28px;--shadow:0 12px 40px rgba(24,24,23,.08);
+  --font:'Plus Jakarta Sans',Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+html[data-theme="dark"]{
+  --bg:#181817;--surface:#242422;--surface2:#373531;--text:#F8F7F3;--muted:#C5BFB4;--line:#55514C;
+  --ink:#9FAAE5;--ink2:#C2CAF0;--inkSoft:#263575;--coral:#FA795D;--coralSoft:#3D1411;
+  --success:#79C99E;--warning:#EFC55B;--danger:#F27A86;--info:#7ACDE5;--money:#79C99E;--white:#141A45;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+svg{display:block}
+.shell{display:grid;grid-template-columns:272px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);padding:22px 18px;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(18px);overflow:auto}
+.brand-lockup{display:flex;align-items:center;gap:12px;padding:4px 4px 18px}
+.brand-mark{width:36px;height:36px}
+.brand-lockup b{font-size:18px;letter-spacing:-.02em}
+.brand-lockup small{display:block;color:var(--muted);font-size:11px;margin-top:1px}
+.nav-group{margin:22px 0}
+.nav-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:800;padding:0 10px 6px}
+.nav a{display:flex;align-items:center;min-height:40px;padding:0 10px;border-radius:10px;color:var(--muted);font-weight:600;font-size:13px}
+.nav a:hover{background:var(--surface2);color:var(--text)}
+.content{min-width:0}
+.topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:14px 28px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(18px)}
+.crumb{font-size:13px;color:var(--muted)}
+.top-actions{display:flex;gap:8px}
+.icon-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);display:grid;place-items:center}
+.main{max-width:1400px;padding:46px 40px 120px;margin:auto}
+.section{padding:48px 0;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.13em;color:var(--coral);margin-bottom:12px}
+h1,h2,h3,h4{line-height:1.12;letter-spacing:-.035em;margin:0}
+h1{font-size:clamp(42px,6vw,82px);max-width:980px}
+h2{font-size:38px;margin-bottom:12px}
+h3{font-size:22px}
+h4{font-size:16px}
+.lead{font-size:19px;color:var(--muted);max-width:820px;margin:18px 0 0}
+.hero{padding:68px 0 58px}
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:end}
+.hero-card{position:relative;min-height:360px;border-radius:32px;overflow:hidden;background:var(--ink);padding:30px;color:#fff;display:flex;flex-direction:column;justify-content:space-between}
+.hero-card:before,.hero-card:after{content:"";position:absolute;border:2px solid rgba(255,255,255,.14);border-radius:999px}
+.hero-card:before{width:320px;height:320px;right:-120px;top:-110px}
+.hero-card:after{width:190px;height:190px;right:15px;top:-35px}
+.hero-card .loop{position:absolute;right:38px;bottom:34px;width:128px;height:128px;border:18px solid rgba(255,255,255,.9);border-right-color:var(--coral);border-radius:50%;transform:rotate(-28deg)}
+.hero-card .loop:after{content:"";position:absolute;width:0;height:0;border-top:18px solid transparent;border-bottom:18px solid transparent;border-left:28px solid var(--coral);right:-30px;top:29px}
+.hero-card small{opacity:.72;font-weight:700}
+.hero-card strong{font-size:34px;line-height:1.1;max-width:330px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);padding:8px 11px;border-radius:999px;font-size:12px;font-weight:700}
+.pill.dot:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--coral)}
+.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:26px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r4);box-shadow:0 1px 2px rgba(24,24,23,.02)}
+.card.pad{padding:20px}
+.kpi .label{font-size:12px;color:var(--muted);font-weight:700}
+.kpi .value{font-size:31px;line-height:1.05;font-weight:800;margin:13px 0 8px;font-variant-numeric:tabular-nums}
+.kpi .delta{font-size:12px;color:var(--muted)}
+.kpi .delta.good{color:var(--success)}
+.money{color:var(--money)}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.showcase{margin-top:26px}
+.swatch-stack{display:grid;gap:7px}
+.swatch-row{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:5px}
+.swatch{height:64px;border-radius:9px;border:1px solid color-mix(in srgb,var(--line) 65%,transparent);position:relative;overflow:hidden}
+.swatch span{position:absolute;left:7px;bottom:5px;font-size:9px;background:rgba(255,255,255,.85);color:#222;padding:2px 4px;border-radius:4px;font-weight:700}
+.type-sample{padding:22px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:170px 1fr;gap:24px;align-items:start}
+.type-sample:last-child{border:0}
+.meta{font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.component-board{padding:18px;border-radius:24px;background:linear-gradient(180deg,color-mix(in srgb,var(--surface2) 45%,transparent),transparent);border:1px dashed var(--line)}
+.component-title{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}
+.component-title small{color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{min-height:44px;border-radius:12px;padding:0 16px;border:1px solid transparent;font-weight:800;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn.primary{background:var(--ink);color:var(--white)}
+html[data-theme="dark"] .btn.primary{color:#141A45}
+.btn.secondary{background:var(--surface);border-color:var(--line);color:var(--text)}
+.btn.ghost{background:transparent;color:var(--text)}
+.btn.danger{background:var(--danger);color:#fff}
+.btn.disabled{opacity:.42;pointer-events:none}
+.btn.loading:before{content:"";width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.input{height:44px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:0 13px;color:var(--text);min-width:220px}
+.input:focus{outline:3px solid color-mix(in srgb,var(--ink) 35%,transparent);border-color:var(--ink)}
+.badge{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);font-size:11px;font-weight:800;background:var(--surface)}
+.badge.success{color:var(--success);background:color-mix(in srgb,var(--success) 8%,var(--surface))}
+.badge.info{color:var(--info);background:color-mix(in srgb,var(--info) 8%,var(--surface))}
+.badge.warning{color:var(--warning);background:color-mix(in srgb,var(--warning) 9%,var(--surface))}
+.badge.danger{color:var(--danger);background:color-mix(in srgb,var(--danger) 8%,var(--surface))}
+.logo-stage{display:grid;place-items:center;min-height:180px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px}
+.logo-stage.dark{background:#1F2A6B}
+.logo-horizontal{max-width:340px;width:100%}
+.logo-symbol{width:98px}
+.clear-space{position:relative;display:grid;place-items:center;min-height:220px;background:var(--surface2);border-radius:20px}
+.clear-space:before{content:"área de proteção 0,5x";position:absolute;inset:28px;border:1px dashed var(--coral);display:grid;place-items:start center;padding-top:4px;color:var(--coral);font-size:10px;font-weight:800}
+.clear-space img{width:88px}
+.radius-row{display:flex;gap:14px;align-items:end;flex-wrap:wrap}
+.radius-box{width:94px;height:76px;background:var(--inkSoft);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:800}
+.space-scale{display:flex;align-items:end;gap:10px;flex-wrap:wrap}
+.space-bar{background:var(--ink);min-width:20px;border-radius:7px 7px 0 0;position:relative}
+.space-bar span{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted)}
+.status-card{padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.status-card strong{font-size:13px}
+.status-card small{display:block;color:var(--muted);margin-top:2px}
+.meter{height:9px;background:var(--surface2);border-radius:999px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--ink);border-radius:inherit}
+.timeline{position:relative;margin-left:9px}
+.timeline:before{content:"";position:absolute;left:8px;top:9px;bottom:9px;width:1px;background:var(--line)}
+.event{display:grid;grid-template-columns:18px 1fr;gap:12px;padding:0 0 18px}
+.event-dot{width:17px;height:17px;border-radius:50%;background:var(--surface);border:4px solid var(--ink);z-index:1}
+.event strong{font-size:13px}
+.event small{display:block;color:var(--muted);margin-top:2px}
+.wa-preview{max-width:330px;padding:18px;border-radius:22px;background:#E8F2E7;color:#202020}
+.wa-bubble{background:white;border-radius:12px 12px 12px 4px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.wa-bubble p{margin:0 0 8px}
+.wa-action{margin-top:7px;border-top:1px solid #e5e5e5;padding-top:8px;text-align:center;color:#1677b8;font-weight:700;font-size:12px}
+.flow{display:grid;gap:10px;max-width:560px}
+.flow-step{position:relative;padding:15px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.flow-step:not(:last-child):after{content:"+";position:absolute;left:50%;bottom:-20px;transform:translateX(-50%);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--white);font-size:12px;font-weight:900;z-index:2}
+.flow-step .step-type{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:800}
+.rule-builder{display:grid;gap:10px}
+.rule-line{display:grid;grid-template-columns:1fr .8fr 1fr 42px;gap:8px}
+.selectlike{min-height:42px;display:flex;align-items:center;padding:0 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:12px}
+.funnel{display:grid;gap:9px}
+.funnel-line{display:grid;grid-template-columns:160px 1fr 60px;gap:10px;align-items:center;font-size:12px}
+.bar{height:12px;background:var(--surface2);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);border-radius:inherit}
+.stepper{display:grid;gap:10px}
+.step{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:center}
+.step-num{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);font-size:11px;font-weight:800}
+.step.active .step-num{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.step.done .step-num{background:var(--success);color:#fff;border-color:var(--success)}
+.alert{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;border:1px solid color-mix(in srgb,var(--warning) 35%,var(--line));background:color-mix(in srgb,var(--warning) 8%,var(--surface))}
+.alert strong{font-size:13px}
+.alert small{display:block;color:var(--muted);margin-top:2px}
+.desktop-frame{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.browserbar{height:42px;border-bottom:1px solid var(--line);background:var(--surface2);display:flex;align-items:center;padding:0 13px;gap:6px}
+.dot3{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.app{display:grid;grid-template-columns:190px 1fr;min-height:500px}
+.app-nav{border-right:1px solid var(--line);padding:16px;background:var(--surface)}
+.app-nav .brand-mini{font-weight:900;color:var(--ink);margin-bottom:20px}
+.app-nav a{display:block;padding:9px 10px;border-radius:9px;font-size:11px;color:var(--muted)}
+.app-nav a.active{background:var(--inkSoft);color:var(--ink);font-weight:800}
+.app-main{padding:22px;background:var(--bg)}
+.app-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.app-title{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.mobile-frame{width:390px;max-width:100%;margin:auto;border:8px solid #242422;border-radius:36px;overflow:hidden;background:var(--bg);box-shadow:0 18px 50px rgba(24,24,23,.18)}
+.mobile-status{height:27px;background:var(--surface);display:flex;align-items:center;justify-content:space-between;padding:0 15px;font-size:9px;font-weight:800}
+.mobile-app{min-height:730px;padding:16px 14px 86px;position:relative}
+.mobile-nav{position:absolute;left:0;right:0;bottom:0;height:70px;border-top:1px solid var(--line);background:var(--surface);display:grid;grid-template-columns:repeat(5,1fr)}
+.mobile-nav div{display:grid;place-items:center;align-content:center;gap:2px;font-size:9px;color:var(--muted)}
+.mobile-nav b{font-size:15px;line-height:1}
+.phone-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.mock-chart{height:150px;display:flex;align-items:end;gap:9px;padding:18px 10px 4px}
+.mock-chart i{display:block;flex:1;background:var(--ink);border-radius:7px 7px 2px 2px;min-width:10px}
+.marketing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.ad-card{aspect-ratio:1/1;border-radius:24px;padding:22px;position:relative;overflow:hidden;border:1px solid var(--line)}
+.ad-card.primary{background:var(--ink);color:white}
+.ad-card.light{background:var(--surface)}
+.ad-card.coral{background:var(--coral);color:#211}
+.ad-card h3{font-size:30px;max-width:280px}
+.ad-card p{max-width:260px}
+.loop-art{position:absolute;width:170px;height:170px;border:24px solid currentColor;border-right-color:var(--coral);border-radius:50%;right:-40px;bottom:-35px;opacity:.85;transform:rotate(-20deg)}
+.ad-card.coral .loop-art{border-color:#fff;border-right-color:#1F2A6B}
+.do-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.do-card{border:1px solid var(--line);border-radius:18px;padding:20px;background:var(--surface)}
+.do-card.good{border-top:4px solid var(--success)}
+.do-card.bad{border-top:4px solid var(--danger)}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:var(--surface2);padding:3px 6px;border-radius:6px}
+@media(max-width:1100px){
+ .shell{grid-template-columns:1fr}.sidebar{display:none}.main{padding:34px 20px 100px}.hero-grid{grid-template-columns:1fr}.grid-4{grid-template-columns:repeat(2,1fr)}.marketing-grid{grid-template-columns:1fr 1fr}.phone-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+ .topbar{padding:10px 14px}.main{padding:26px 14px 80px}.section{padding:38px 0}.hero{padding:38px 0}
+ h2{font-size:30px}.grid-2,.grid-3,.grid-4,.stat-grid,.marketing-grid,.do-grid{grid-template-columns:1fr}
+ .swatch-row{grid-template-columns:repeat(6,1fr)}.type-sample{grid-template-columns:1fr;gap:6px}
+ .rule-line{grid-template-columns:1fr}.funnel-line{grid-template-columns:120px 1fr 45px}.app{grid-template-columns:1fr}.app-nav{display:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand-lockup">
+      <img class="brand-mark" src="assets/logo-symbol.svg" alt="">
+      <div><b>Outra Vez</b><small>Design System v2.0</small></div>
+    </div>
+    <div class="nav">
+      <div class="nav-group"><div class="nav-label">Comece aqui</div>
+        <a href="#overview">Visão geral</a><a href="#brand">Marca</a><a href="#voice">Voz & conteúdo</a>
+      </div>
+      <div class="nav-group"><div class="nav-label">Foundations</div>
+        <a href="#colors">Cores</a><a href="#type">Tipografia</a><a href="#spacing">Espaçamento & grid</a><a href="#motion">Raio, sombra & movimento</a>
+      </div>
+      <div class="nav-group"><div class="nav-label">Biblioteca</div>
+        <a href="#base-components">Componentes base</a><a href="#product-components">Componentes Outra Vez</a><a href="#patterns">Padrões</a>
+      </div>
+      <div class="nav-group"><div class="nav-label">Produto</div>
+        <a href="#screens">Telas</a><a href="#mobile">Mobile</a><a href="#desktop">Desktop</a><a href="#marketing">Comunicação</a>
+      </div>
+      <div class="nav-group"><div class="nav-label">Entrega</div>
+        <a href="#accessibility">Acessibilidade</a><a href="#implementation">Implementação</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="topbar">
+      <div class="crumb">Outra Vez / Design System / v2.0</div>
+      <div class="top-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Alternar tema">◐</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <section id="overview" class="hero section">
+        <div class="eyebrow">Direção A · Retorno quente</div>
+        <div class="hero-grid">
+          <div>
+            <h1>Vendeu uma vez?<br>Venda outra vez.</h1>
+            <p class="lead">Um sistema visual para transformar dados, recompra e relacionamento em algo simples para quem vende em marketplace — sem cara de BI e sem copiar nenhuma marca de canal.</p>
+            <div class="pills">
+              <span class="pill dot">Parceiro de balcão</span><span class="pill">Mobile-first</span><span class="pill">WCAG AA</span><span class="pill">shadcn/ui</span><span class="pill">Lucide</span>
+            </div>
+          </div>
+          <div class="hero-card">
+            <small>A metáfora da marca</small>
+            <strong>Algo sai.<br>Encontra o cliente.<br>E volta em venda.</strong>
+            <div class="loop"></div>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="card pad kpi"><div class="label">Vendas geradas pelo Outra Vez</div><div class="value money">R$ 4.820</div><div class="delta good">↗ R$ 920 a mais que mês passado</div></div>
+          <div class="card pad kpi"><div class="label">Clientes</div><div class="value">3.214</div><div class="delta">184 novos no período</div></div>
+          <div class="card pad kpi"><div class="label">Com WhatsApp</div><div class="value">68%</div><div class="delta">2.186 clientes encontrados</div></div>
+          <div class="card pad kpi"><div class="label">Aceitaram novidades</div><div class="value">27%</div><div class="delta">868 clientes</div></div>
+        </div>
+      </section>
+
+      <section id="brand" class="section">
+        <div class="eyebrow">Marca</div><h2>Identidade construída em torno do retorno.</h2>
+        <p class="lead">O símbolo é um “O” que volta ao ponto de partida. Azul-tinta carrega confiança; coral marca o momento do retorno.</p>
+        <div class="grid-3 showcase">
+          <div class="logo-stage"><img class="logo-horizontal" src="assets/logo-horizontal.svg"></div>
+          <div class="logo-stage dark"><img class="logo-horizontal" src="assets/logo-horizontal-negative.svg"></div>
+          <div class="clear-space"><img src="assets/logo-symbol.svg"></div>
+        </div>
+        <div class="grid-4 showcase">
+          <div class="card pad"><div class="eyebrow">Horizontal</div><h3>Produto & institucional</h3><p class="muted">Uso principal em interfaces, apresentações e documentos.</p></div>
+          <div class="card pad"><div class="eyebrow">Símbolo</div><h3>App & favicon</h3><p class="muted">Funciona a partir de 20 px e conserva o gesto de retorno.</p></div>
+          <div class="card pad"><div class="eyebrow">Avatar</div><h3>WhatsApp Business</h3><p class="muted">Símbolo centralizado, com 12% de respiro periférico.</p></div>
+          <div class="card pad"><div class="eyebrow">Proteção</div><h3>0,5× o símbolo</h3><p class="muted">Nada invade essa área, nem textos, bordas ou logos parceiros.</p></div>
+        </div>
+      </section>
+
+      <section id="colors" class="section">
+        <div class="eyebrow">Foundations</div><h2>Cor com função, não decoração.</h2>
+        <p class="lead">O coral não substitui o azul como ação principal. Ele existe para sinalizar retorno, ciclos e momentos de marca.</p>
+        <div class="showcase">
+          <h3 style="margin-bottom:12px">Azul-tinta</h3>
+          <div class="swatch-row">
+            <div class="swatch" style="background:#EEF0FB"><span>50</span></div><div class="swatch" style="background:#DCE1F7"><span>100</span></div>
+            <div class="swatch" style="background:#C2CAF0"><span>200</span></div><div class="swatch" style="background:#9FAAE5"><span>300</span></div>
+            <div class="swatch" style="background:#7484D6"><span>400</span></div><div class="swatch" style="background:#5365C1"><span>500</span></div>
+            <div class="swatch" style="background:#3F50A8"><span>600</span></div><div class="swatch" style="background:#303F8C"><span>700</span></div>
+            <div class="swatch" style="background:#263575"><span>800</span></div><div class="swatch" style="background:#1F2A6B"><span>900</span></div>
+            <div class="swatch" style="background:#141A45"><span>950</span></div>
+          </div>
+        </div>
+        <div class="showcase">
+          <h3 style="margin-bottom:12px">Coral retorno</h3>
+          <div class="swatch-row">
+            <div class="swatch" style="background:#FFF1ED"><span>50</span></div><div class="swatch" style="background:#FFE2DA"><span>100</span></div>
+            <div class="swatch" style="background:#FFC8BB"><span>200</span></div><div class="swatch" style="background:#FFA18C"><span>300</span></div>
+            <div class="swatch" style="background:#FA795D"><span>400</span></div><div class="swatch" style="background:#E85D4A"><span>500</span></div>
+            <div class="swatch" style="background:#C94636"><span>600</span></div><div class="swatch" style="background:#A8372B"><span>700</span></div>
+            <div class="swatch" style="background:#892F27"><span>800</span></div><div class="swatch" style="background:#712B25"><span>900</span></div>
+            <div class="swatch" style="background:#3D1411"><span>950</span></div>
+          </div>
+        </div>
+        <div class="grid-4 showcase">
+          <div class="card pad"><div style="width:34px;height:34px;border-radius:50%;background:var(--success)"></div><h3 style="margin-top:14px">Sucesso</h3><p class="muted">Venda, integração ativa, importação concluída.</p></div>
+          <div class="card pad"><div style="width:34px;height:34px;border-radius:50%;background:var(--warning)"></div><h3 style="margin-top:14px">Aviso</h3><p class="muted">Créditos baixos, número a confirmar.</p></div>
+          <div class="card pad"><div style="width:34px;height:34px;border-radius:50%;background:var(--danger)"></div><h3 style="margin-top:14px">Erro</h3><p class="muted">Falha, desconexão, exclusão e bloqueio.</p></div>
+          <div class="card pad"><div style="width:34px;height:34px;border-radius:50%;background:var(--info)"></div><h3 style="margin-top:14px">Informação</h3><p class="muted">Contexto neutro, dica e aviso operacional.</p></div>
+        </div>
+      </section>
+
+      <section id="type" class="section">
+        <div class="eyebrow">Tipografia</div><h2>Plus Jakarta Sans</h2>
+        <p class="lead">Humanista, legível e amigável em telas pequenas. Valores e percentuais usam algarismos tabulares.</p>
+        <div class="showcase card pad">
+          <div class="type-sample"><div class="meta">Display · 64/68 · 700</div><div style="font-size:64px;line-height:1.05;font-weight:700;letter-spacing:-.05em">Venda outra vez.</div></div>
+          <div class="type-sample"><div class="meta">H1 · 36/43 · 700</div><div style="font-size:36px;line-height:1.2;font-weight:700">Bom dia, Diego</div></div>
+          <div class="type-sample"><div class="meta">H2 · 24/29 · 700</div><div style="font-size:24px;line-height:1.2;font-weight:700">Clientes na hora de repor</div></div>
+          <div class="type-sample"><div class="meta">Body · 16/24 · 400</div><div style="font-size:16px">Vamos ler seus pedidos e notas fiscais para montar sua lista de clientes.</div></div>
+          <div class="type-sample"><div class="meta">KPI · 36/43 · 700</div><div style="font-size:36px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--money)">R$ 4.820,00</div></div>
+        </div>
+      </section>
+
+      <section id="spacing" class="section">
+        <div class="eyebrow">Espaçamento & grid</div><h2>Base de 4 px.</h2>
+        <div class="showcase card pad">
+          <div class="space-scale">
+            <div class="space-bar" style="height:16px"><span>4</span></div><div class="space-bar" style="height:24px"><span>8</span></div>
+            <div class="space-bar" style="height:32px"><span>12</span></div><div class="space-bar" style="height:40px"><span>16</span></div>
+            <div class="space-bar" style="height:48px"><span>20</span></div><div class="space-bar" style="height:56px"><span>24</span></div>
+            <div class="space-bar" style="height:72px"><span>32</span></div><div class="space-bar" style="height:88px"><span>40</span></div>
+            <div class="space-bar" style="height:104px"><span>48</span></div><div class="space-bar" style="height:130px"><span>64</span></div>
+          </div>
+        </div>
+        <div class="grid-4 showcase">
+          <div class="card pad"><h3>360</h3><p class="muted">Base mínima real. Uma mão. Sem rolagem horizontal.</p></div>
+          <div class="card pad"><h3>640</h3><p class="muted">Mobile amplo / início de layouts em duas colunas.</p></div>
+          <div class="card pad"><h3>768</h3><p class="muted">Tablet e adaptação de listas densas.</p></div>
+          <div class="card pad"><h3>1024 / 1280</h3><p class="muted">Sidebar, grade completa e análise visual.</p></div>
+        </div>
+      </section>
+
+      <section id="motion" class="section">
+        <div class="eyebrow">Raio, sombra & movimento</div><h2>Suave, rápido e discreto.</h2>
+        <div class="radius-row showcase">
+          <div class="radius-box" style="border-radius:6px">6 px</div><div class="radius-box" style="border-radius:10px">10 px</div>
+          <div class="radius-box" style="border-radius:14px">14 px</div><div class="radius-box" style="border-radius:20px">20 px</div><div class="radius-box" style="border-radius:28px">28 px</div>
+        </div>
+        <div class="grid-3 showcase">
+          <div class="card pad"><h3>150 ms</h3><p class="muted">Hover, foco, press e microinterações.</p></div>
+          <div class="card pad"><h3>250 ms</h3><p class="muted">Drawer, sheet, mudança de painel.</p></div>
+          <div class="card pad"><h3>600 ms máx.</h3><p class="muted">Celebração de “cliente voltou”, respeitando reduced motion.</p></div>
+        </div>
+      </section>
+
+      <section id="base-components" class="section">
+        <div class="eyebrow">Componentes base</div><h2>shadcn/ui com linguagem Outra Vez.</h2>
+        <div class="grid-2 showcase">
+          <div class="component-board">
+            <div class="component-title"><h3>Button</h3><small>default · hover · focus · disabled · loading</small></div>
+            <div class="row">
+              <button class="btn primary">Criar régua</button><button class="btn secondary">Ver clientes</button><button class="btn ghost">Mais opções</button>
+              <button class="btn danger">Excluir</button><button class="btn primary disabled">Desabilitado</button><button class="btn primary loading">Salvando</button>
+            </div>
+          </div>
+          <div class="component-board">
+            <div class="component-title"><h3>Input & Select</h3><small>44 px mínimo</small></div>
+            <div class="row"><input class="input" value="Maria Silva"><div class="selectlike">Mercado Livre ▾</div></div>
+          </div>
+          <div class="component-board">
+            <div class="component-title"><h3>Status</h3><small>sempre ícone + texto</small></div>
+            <div class="row"><span class="badge success">✓ Aceitou novidades</span><span class="badge info">ℹ Só avisos do pedido</span><span class="badge danger">⊘ Não quer mensagens</span><span class="badge">? Ainda não contatado</span></div>
+          </div>
+          <div class="component-board">
+            <div class="component-title"><h3>Canal</h3><small>sem logo, sem cor-assinatura</small></div>
+            <div class="row"><span class="badge">Mercado Livre</span><span class="badge">Shopee</span><span class="badge">Amazon</span><span class="badge">Magalu</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="product-components" class="section">
+        <div class="eyebrow">Componentes Outra Vez</div><h2>O produto ganha personalidade aqui.</h2>
+        <div class="grid-2 showcase">
+          <div class="component-board">
+            <div class="component-title"><h3>Saúde de integração</h3><small>Bling / WhatsApp</small></div>
+            <div class="status-card"><div><strong>✓ Bling conectado</strong><small>Última leitura há 3 min</small></div><button class="btn secondary">Ver detalhes</button></div>
+            <div style="height:9px"></div>
+            <div class="status-card"><div><strong style="color:var(--warning)">↻ Bling precisa reconectar</strong><small>Não recebemos novos pedidos desde 08:31</small></div><button class="btn primary">Reconectar</button></div>
+          </div>
+          <div class="component-board">
+            <div class="component-title"><h3>Medidor de créditos</h3><small>saldo + tempo restante</small></div>
+            <div class="card pad"><div class="row" style="justify-content:space-between"><div><b>Créditos de WhatsApp</b><div class="muted">R$ 184,20 disponíveis</div></div><button class="btn secondary">Adicionar créditos</button></div><div style="height:14px"></div><div class="meter"><i style="width:62%"></i></div><p class="muted" style="margin:8px 0 0">aprox. 12 dias no ritmo atual</p></div>
+          </div>
+
+          <div class="component-board">
+            <div class="component-title"><h3>Linha do tempo do cliente</h3><small>pedido · mensagem · clique · recompra</small></div>
+            <div class="timeline">
+              <div class="event"><div class="event-dot"></div><div><strong>Comprou de novo · R$ 89,90</strong><small>02/11/2026 · Pedido #61294</small></div></div>
+              <div class="event"><div class="event-dot" style="border-color:var(--info)"></div><div><strong>Mensagem lida</strong><small>10/10/2026 · “pedido_entregue”</small></div></div>
+              <div class="event"><div class="event-dot" style="border-color:var(--muted)"></div><div><strong>Pedido #58421 · R$ 129,90</strong><small>08/10/2026</small></div></div>
+            </div>
+          </div>
+          <div class="component-board">
+            <div class="component-title"><h3>Prévia do WhatsApp</h3><small>único lugar com verde-WhatsApp</small></div>
+            <div class="wa-preview"><div class="wa-bubble"><p>Oi, Maria! Seu Kit Refil costuma durar por volta de 30 dias. Quer repor antes que acabe?</p><small>11:42 ✓✓</small><div class="wa-action">Quero repor</div><div class="wa-action">Agora não</div></div></div>
+          </div>
+
+          <div class="component-board">
+            <div class="component-title"><h3>Editor de régua</h3><small>vertical em desktop e mobile</small></div>
+            <div class="flow">
+              <div class="flow-step"><div class="step-type">Gatilho</div><b>Quando estiver perto da próxima compra prevista</b></div>
+              <div class="flow-step"><div class="step-type">Esperar</div><b>0 dias</b></div>
+              <div class="flow-step"><div class="step-type">Condição</div><b>Aceitou novidades?</b></div>
+              <div class="flow-step"><div class="step-type">Enviar mensagem</div><b>“hora_de_repor”</b></div>
+              <div class="flow-step"><div class="step-type">Sair</div><b>Ao comprar</b></div>
+            </div>
+          </div>
+          <div class="component-board">
+            <div class="component-title"><h3>Construtor de lista</h3><small>regras + contagem ao vivo</small></div>
+            <div class="rule-builder">
+              <div class="rule-line"><div class="selectlike">Última compra</div><div class="selectlike">há mais de</div><div class="selectlike">45 dias</div><button class="icon-btn">×</button></div>
+              <div class="badge">E também</div>
+              <div class="rule-line"><div class="selectlike">Aceitou novidades</div><div class="selectlike">é</div><div class="selectlike">Sim</div><button class="icon-btn">×</button></div>
+              <div class="card pad"><b style="font-size:22px">312 clientes</b><div class="muted">atualizado agora</div></div>
+            </div>
+          </div>
+
+          <div class="component-board">
+            <div class="component-title"><h3>Funil</h3><small>número + texto + forma</small></div>
+            <div class="funnel">
+              <div class="funnel-line"><span>Busca de WhatsApp</span><div class="bar"><i style="width:100%"></i></div><b>3.214</b></div>
+              <div class="funnel-line"><span>Contatado</span><div class="bar"><i style="width:72%"></i></div><b>2.186</b></div>
+              <div class="funnel-line"><span>Aceitou novidades</span><div class="bar"><i style="width:45%"></i></div><b>868</b></div>
+              <div class="funnel-line"><span>Clicou</span><div class="bar"><i style="width:24%"></i></div><b>421</b></div>
+              <div class="funnel-line"><span>Comprou de novo</span><div class="bar"><i style="width:12%"></i></div><b>188</b></div>
+            </div>
+          </div>
+          <div class="component-board">
+            <div class="component-title"><h3>Stepper</h3><small>retomável · 6 passos</small></div>
+            <div class="stepper">
+              <div class="step done"><div class="step-num">✓</div><div><b>Criar conta</b><div class="muted">Concluído</div></div></div>
+              <div class="step active"><div class="step-num">2</div><div><b>Conectar Bling</b><div class="muted">Você está aqui</div></div></div>
+              <div class="step"><div class="step-num">3</div><div><b>Ler pedidos</b></div></div>
+              <div class="step"><div class="step-num">4</div><div><b>Encontrar WhatsApp</b></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="patterns" class="section">
+        <div class="eyebrow">Padrões</div><h2>Mensagens que reduzem ansiedade.</h2>
+        <div class="grid-2 showcase">
+          <div class="alert"><div>⚠</div><div><strong>Seu Bling precisa ser reconectado</strong><small>Enquanto isso, novos pedidos não entram no Outra Vez.</small><div style="margin-top:10px"><button class="btn primary">Reconectar</button></div></div></div>
+          <div class="card pad"><div class="eyebrow">Confirmação com custo</div><h3>Enviar “sentimos_sua_falta” para 1.240 clientes?</h3><p class="muted">Custo estimado no WhatsApp: <b>R$ 398,91</b>. 316 clientes ficam de fora porque não aceitaram novidades.</p><div class="row"><button class="btn primary">Enviar para 1.240 clientes</button><button class="btn secondary">Voltar e revisar</button></div></div>
+        </div>
+      </section>
+
+      <section id="screens" class="section">
+        <div class="eyebrow">Telas de referência</div><h2>O sistema aplicado no produto.</h2>
+        <p class="lead">As telas abaixo usam só componentes do próprio sistema. Mobile e desktop compartilham a mesma lógica.</p>
+      </section>
+
+      <section id="mobile" class="section">
+        <div class="eyebrow">Mobile · 390 px</div><h2>Uma mão. Uma decisão por vez.</h2>
+        <div class="phone-grid showcase">
+          <div class="mobile-frame">
+            <div class="mobile-status"><span>9:41</span><span>● ●●</span></div>
+            <div class="mobile-app">
+              <div class="muted" style="font-size:11px">Início</div><h3 style="font-size:27px;margin:3px 0 16px">Bom dia, Diego</h3>
+              <div class="card pad kpi" style="border-left:4px solid var(--coral)"><div class="label">Vendas geradas pelo Outra Vez</div><div class="value money">R$ 4.820</div><div class="delta good">↗ R$ 920 a mais que mês passado</div></div>
+              <div class="grid-2" style="gap:10px;margin-top:10px"><div class="card pad kpi"><div class="label">Clientes</div><div class="value" style="font-size:24px">3.214</div></div><div class="card pad kpi"><div class="label">Com WhatsApp</div><div class="value" style="font-size:24px">68%</div></div></div>
+              <div class="card pad" style="margin-top:10px;background:var(--inkSoft)"><div class="eyebrow" style="margin-bottom:4px">Oportunidade</div><b>312 clientes na hora de repor o Kit Refil</b><div style="margin-top:12px"><button class="btn primary">Ver clientes</button></div></div>
+              <div class="card pad" style="margin-top:10px"><b>Vendas por semana</b><div class="mock-chart"><i style="height:38%"></i><i style="height:52%"></i><i style="height:43%"></i><i style="height:78%"></i><i style="height:66%"></i><i style="height:92%;background:var(--coral)"></i></div></div>
+              <div class="mobile-nav"><div><b>⌂</b>Início</div><div><b>◎</b>Clientes</div><div><b>↻</b>Réguas</div><div><b>➤</b>Envios</div><div><b>•••</b>Mais</div></div>
+            </div>
+          </div>
+
+          <div class="mobile-frame">
+            <div class="mobile-status"><span>9:41</span><span>● ●●</span></div>
+            <div class="mobile-app">
+              <div class="row" style="justify-content:space-between"><div><div class="muted" style="font-size:11px">Cliente</div><h3 style="font-size:27px;margin-top:3px">Maria Silva</h3></div><button class="icon-btn">•••</button></div>
+              <p class="muted">***.456.789-**</p>
+              <div class="row"><span class="badge">Mercado Livre</span><span class="badge">Shopee</span><span class="badge success">✓ Aceitou novidades</span><span class="badge">Leais</span></div>
+              <div class="card pad kpi" style="margin-top:14px"><div class="label">LTV</div><div class="value money">R$ 842,30</div></div>
+              <h4 style="margin:20px 0 12px">Histórico</h4>
+              <div class="timeline">
+                <div class="event"><div class="event-dot"></div><div><strong>Comprou de novo · R$ 89,90</strong><small>02/11/2026</small></div></div>
+                <div class="event"><div class="event-dot" style="border-color:var(--info)"></div><div><strong>Mensagem lida</strong><small>10/10/2026</small></div></div>
+                <div class="event"><div class="event-dot" style="border-color:var(--muted)"></div><div><strong>Pedido #58421 · R$ 129,90</strong><small>08/10/2026</small></div></div>
+              </div>
+              <div class="mobile-nav"><div><b>⌂</b>Início</div><div><b>◎</b>Clientes</div><div><b>↻</b>Réguas</div><div><b>➤</b>Envios</div><div><b>•••</b>Mais</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="desktop" class="section">
+        <div class="eyebrow">Desktop · 1440 px</div><h2>Mais contexto sem virar painel de BI.</h2>
+        <div class="desktop-frame showcase">
+          <div class="browserbar"><i class="dot3"></i><i class="dot3"></i><i class="dot3"></i></div>
+          <div class="app">
+            <aside class="app-nav">
+              <div class="brand-mini">Outra Vez</div>
+              <a class="active">Início</a><a>Clientes</a><a>Réguas</a><a>Envios</a><a>Integrações</a><a>Configurações</a>
+            </aside>
+            <div class="app-main">
+              <div class="app-header"><div><div class="muted" style="font-size:11px">Início</div><div class="app-title">Bom dia, Diego</div></div><button class="btn secondary">Adicionar créditos</button></div>
+              <div class="grid-4">
+                <div class="card pad kpi"><div class="label">Vendas geradas pelo Outra Vez</div><div class="value money">R$ 4.820</div><div class="delta good">↗ R$ 920 a mais</div></div>
+                <div class="card pad kpi"><div class="label">Clientes</div><div class="value">3.214</div></div>
+                <div class="card pad kpi"><div class="label">Com WhatsApp</div><div class="value">68%</div></div>
+                <div class="card pad kpi"><div class="label">Aceitaram novidades</div><div class="value">27%</div></div>
+              </div>
+              <div class="grid-2" style="margin-top:16px">
+                <div class="card pad"><div class="row" style="justify-content:space-between"><b>Vendas por semana</b><span class="badge">Últimos 30 dias</span></div><div class="mock-chart"><i style="height:35%"></i><i style="height:48%"></i><i style="height:43%"></i><i style="height:66%"></i><i style="height:58%"></i><i style="height:78%"></i><i style="height:92%;background:var(--coral)"></i></div></div>
+                <div class="card pad"><div class="eyebrow" style="margin-bottom:6px">Oportunidade</div><h3>312 clientes na hora de repor o Kit Refil</h3><p class="muted">Clientes cuja próxima compra prevista está chegando.</p><button class="btn primary">Ver clientes</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="marketing" class="section">
+        <div class="eyebrow">Comunicação visual</div><h2>O mesmo sistema fora do produto.</h2>
+        <p class="lead">Peças partem da mesma lógica: uma ideia, um número, um gesto de retorno. Nada de dashboard genérico flutuando no espaço.</p>
+        <div class="marketing-grid showcase">
+          <div class="ad-card primary"><div class="eyebrow" style="color:#FFA18C">Outra Vez</div><h3>Seu cliente já comprou. A próxima venda pode começar daí.</h3><p>Transforme pedidos do marketplace em recompra mensurável.</p><div class="loop-art"></div></div>
+          <div class="ad-card light"><div class="eyebrow">Resultado</div><h3 style="color:var(--money)">R$ 4.820 voltaram em vendas.</h3><p>Veja quanto seus clientes compraram de novo depois do primeiro pedido.</p><div class="pill dot">Vendas geradas pelo Outra Vez</div></div>
+          <div class="ad-card coral"><div class="eyebrow" style="color:#1F2A6B">Reposição</div><h3>312 clientes estão perto da hora de comprar de novo.</h3><p>Você escolhe a régua. O Outra Vez mostra quem voltou.</p><div class="loop-art"></div></div>
+        </div>
+      </section>
+
+      <section id="voice" class="section">
+        <div class="eyebrow">Voz & conteúdo</div><h2>Fale como lojista com lojista.</h2>
+        <div class="do-grid showcase">
+          <div class="do-card good"><div class="eyebrow">Faça</div><h3>312 clientes estão na hora de repor.</h3><p class="muted">Concreto, direto, ligado a uma ação real.</p></div>
+          <div class="do-card bad"><div class="eyebrow" style="color:var(--danger)">Não faça</div><h3>Ative um segmento de leads de alta propensão.</h3><p class="muted">Jargão técnico cria distância e não explica o valor.</p></div>
+        </div>
+        <div class="grid-3 showcase">
+          <div class="card pad"><b>Régua</b><p class="muted">Nunca “journey”.</p></div>
+          <div class="card pad"><b>Lista de clientes</b><p class="muted">Nunca “segment”.</p></div>
+          <div class="card pad"><b>Comprou de novo</b><p class="muted">Nunca “conversion”.</p></div>
+        </div>
+      </section>
+
+      <section id="accessibility" class="section">
+        <div class="eyebrow">Acessibilidade</div><h2>Clareza é parte da marca.</h2>
+        <div class="grid-4 showcase">
+          <div class="card pad"><h3>44×44 px</h3><p class="muted">Alvo mínimo de toque.</p></div>
+          <div class="card pad"><h3>4,5:1</h3><p class="muted">Texto normal.</p></div>
+          <div class="card pad"><h3>3:1</h3><p class="muted">UI e texto grande.</p></div>
+          <div class="card pad"><h3>Ícone + texto</h3><p class="muted">Estado nunca depende só de cor.</p></div>
+        </div>
+      </section>
+
+      <section id="implementation" class="section">
+        <div class="eyebrow">Implementação</div><h2>Feito para Claude Code + shadcn/ui.</h2>
+        <div class="grid-2 showcase">
+          <div class="card pad"><h3>Fonte da verdade</h3><p class="muted">Tokens em JSON/CSS, especificação de componentes, telas e registry.</p><p><span class="code">tokens.json</span> <span class="code">CLAUDE.md</span> <span class="code">registry/</span></p></div>
+          <div class="card pad"><h3>Regra de geração</h3><p class="muted">Claude Code deve reutilizar componente e token antes de inventar qualquer novo padrão.</p></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<script>
+const btn=document.getElementById('themeToggle');
+btn.addEventListener('click',()=>{
+ const html=document.documentElement;
+ html.dataset.theme=html.dataset.theme==='dark'?'light':'dark';
+});
+</script>
+</body>
+</html>

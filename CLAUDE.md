@@ -4,7 +4,7 @@ Landing page do Outra Vez. Objetivo único: **agendar uma demo gratuita**.
 
 ## Leia antes de mexer
 
-1. `docs/PRD_LP.md` — fonte da verdade da LP (estrutura, copy, fases).
+1. `docs/PRD_LP_v2.md`: fonte da verdade da LP (copy, estrutura, calculadora, integrações). O que o v2 não redefine segue `docs/PRD_LP.md` (ADR-LP-14).
 2. `brand/CLAUDE.md` e `brand/DESIGN_SYSTEM_SPEC.md` — regras da marca (Regra 0).
 3. `brand/tokens.json` e `brand/registry/*.json` — normativos. `brand/design-system-v2.html` é só referência visual.
 
@@ -16,7 +16,7 @@ Não edite nada em `brand/`: é cópia do design system. Mudou a marca → atual
 - Todo botão primário é azul-tinta (`bg-primary`). Coral **nunca** é botão nem hover de botão.
 - Texto coral pequeno em fundo claro: `coral-700` (classe `.eyebrow`). Em faixa escura: `coral-300` (`.eyebrow-on-dark`). `coral-500` só decorativo ou texto ≥ 24 px bold.
 - Verde WhatsApp (`whatsapp`) só dentro de representações do WhatsApp.
-- Textos: só em `lib/copy/pt-BR.ts`, idênticos à seção 6 do PRD. Nunca: lead, opt-in, enriquecimento, conversão, journey, segmento, CRM de funil, growth (teste em `tests/unit/copy.test.ts`).
+- Textos: só em `lib/copy/pt-BR.ts`, idênticos ao PRD v2 (seção 9). Zero travessão (— ou –). Nunca: lead, opt-in, enriquecimento, conversão, journey, segmento, CRM de funil, growth (teste em `tests/unit/copy.test.ts`).
 - Sem logo, mascote ou cor de marketplace/Bling. Canais = chips neutros com o nome.
 - Sem depoimento, logo de cliente ou número inventado. Números do tour vêm de `lib/mock/loja-exemplo.ts` com o rótulo "Dados de uma loja de exemplo."
 - Mobile-first em 360 px, sem rolagem horizontal, toque ≥ 44 px, WCAG 2.1 AA, `tabular-nums` em todo número.

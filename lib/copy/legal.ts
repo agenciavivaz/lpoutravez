@@ -1,6 +1,6 @@
 /**
  * Política de privacidade e termos de uso do SITE (não do produto).
- * [confirmar Diego] Texto-base para revisão jurídica (PRD 17, pergunta 7) — não é parecer legal.
+ * [confirmar Diego] Texto-base para revisão jurídica (PRD 17, pergunta 7): não é parecer legal.
  * Sem CNPJ e sem e-mail de contato confirmados, os trechos ficam neutros (ver lib/site.ts).
  */
 

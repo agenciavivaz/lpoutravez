@@ -2,7 +2,7 @@ import { copy } from '@/lib/copy/pt-BR';
 import { site } from '@/lib/site';
 
 /**
- * Dados estruturados (PRD 13): Organization, SoftwareApplication (sem aggregateRating — não há
+ * Dados estruturados (PRD 13): Organization, SoftwareApplication (sem aggregateRating: não há
  * avaliações) e FAQPage com as 9 perguntas.
  */
 export function JsonLd() {

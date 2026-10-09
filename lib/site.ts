@@ -18,12 +18,12 @@ export const site = {
   calLink: process.env.NEXT_PUBLIC_CAL_LINK || null,
   /** [confirmar Diego] E-mail de contato para a política de privacidade. */
   contactEmail: null as string | null,
-  /** [confirmar Diego] CNPJ da Vivaz — PRD seção 17, pergunta 6. */
+  /** [confirmar Diego] CNPJ da Vivaz: PRD seção 17, pergunta 6. */
   cnpj: null as string | null,
   features: {
     simulator: flag(process.env.NEXT_PUBLIC_FEATURE_SIMULATOR, true),
     pilot: flag(process.env.NEXT_PUBLIC_FEATURE_PILOT, false),
-    /** [confirmar Diego] Card "Eu mesmo faço a demo" — PRD 17, pergunta 4. */
+    /** [confirmar Diego] Card "Eu mesmo faço a demo": PRD 17, pergunta 4. */
     hostCard: false,
   },
 } as const;

@@ -19,6 +19,17 @@ const glossaryStrings = [...strings, ...allStrings(privacy), ...allStrings(terms
 const DEVIATIONS = new Set([
   // ADR-LP-10: PRD 7.5 usa "segmento", proibido pelo glossário 4.5.
   'total gasto, pedidos e tipo de cliente.',
+  // ADR-LP-14: PRD v2 usa "segmento" (5.2 e FAQ 4); o glossário do DS manda "lista de clientes".
+  'Por produto, margem ou lista de clientes',
+  'Você escolhe. O padrão é o seu anúncio no marketplace. Se você tem loja virtual ou vende pelo WhatsApp, pode levar clientes que aceitaram novidades para o seu canal, por produto ou por lista de clientes.',
+  // ADR-LP-14: linha da comparação reescrita sem "a partir da nota" (PRD v2 5.1, "O que NÃO dizer").
+  'Encontra um contato válido para cada comprador',
+  // ADR-LP-14: passo 2 da demo sem restringir ao Bling (PRD v2 6).
+  'Da conexão com o ERP até a primeira venda que volta.',
+  // ADR-LP-14: hero com nome de loja fictícia (PRD v2 9.2, "Casa Lavanda").
+  'Oi, Maria! Aqui é da Casa Lavanda. Seu pedido Kit Refil Lavanda foi faturado e já está seguindo para entrega. Se tiver qualquer problema com a entrega, é só responder esta mensagem. Você também quer receber dicas e ofertas da Casa Lavanda por aqui?',
+  // ADR-LP-14: título da aba Envio usa o benefício "Custo antes de enviar." da antiga "O que muda".
+  'Você vê quanto o WhatsApp vai cobrar e quantos clientes ficam de fora antes de confirmar qualquer envio em massa.',
 ]);
 const source = readFileSync(join(process.cwd(), 'lib/copy/pt-BR.ts'), 'utf8');
 
@@ -56,8 +67,23 @@ describe('lib/copy/pt-BR.ts', () => {
     expect(source).not.toMatch(/depoimento/i);
   });
 
-  it('todo texto visível existe literalmente no PRD (seções 6, 12.1 e 13)', () => {
-    const prd = readFileSync(join(process.cwd(), 'docs/PRD_LP.md'), 'utf8');
+  it('não tem travessão (PRD v2 4.2)', () => {
+    for (const text of glossaryStrings) expect(text, text).not.toMatch(/[\u2013\u2014]/);
+  });
+
+  it('não usa padrões proibidos da PRD v2 4.2 e 13', () => {
+    const all = strings.join('\n');
+    expect(all).not.toMatch(/Não precisava ser assim/);
+    expect(all).not.toMatch(/\bjornada\b/i);
+    expect(all).not.toMatch(/integração nativa/i);
+    expect(all.match(/no automático/gi) ?? []).toHaveLength(0);
+    expect(all.match(/na demo mostramos/gi)?.length ?? 0).toBeLessThanOrEqual(2);
+  });
+
+  it('todo texto visível existe literalmente no PRD (v2, ou v1 onde o v2 não redefine)', () => {
+    const prd =
+      readFileSync(join(process.cwd(), 'docs/PRD_LP_v2.md'), 'utf8') +
+      readFileSync(join(process.cwd(), 'docs/PRD_LP.md'), 'utf8');
     // Chaves que não são texto do PRD: ícones, ids, âncoras, valores internos e rótulos de acessibilidade.
     const skipKeys = new Set([
       'icon',
@@ -69,11 +95,15 @@ describe('lib/copy/pt-BR.ts', () => {
       'a11y',
       'ui',
       'whatsappMessage',
+      'storeName',
+      'cnpj',
     ]);
     const missing: string[] = [];
     const walk = (value: unknown, path: string) => {
       if (typeof value === 'string') {
-        if (value.trim() && !prd.includes(value) && !DEVIATIONS.has(value))
+        // Títulos ganham ponto final na página; no PRD às vezes aparecem sem ele, entre aspas.
+        const bare = value.replace(/\.$/, '');
+        if (value.trim() && !prd.includes(value) && !prd.includes(bare) && !DEVIATIONS.has(value))
           missing.push(`${path}: "${value}"`);
         return;
       }
@@ -90,11 +120,7 @@ describe('lib/copy/pt-BR.ts', () => {
     expect(prd).toContain(encodeURIComponent(copy.finalCta.whatsappMessage));
   });
 
-  it('cards de número leem como no PRD', () => {
-    const prd = readFileSync(join(process.cwd(), 'docs/PRD_LP.md'), 'utf8');
-    for (const card of copy.benefits.cards) {
-      if (card.kind !== 'icon') expect(prd).toContain(`${card.number} ${card.title}`);
-    }
+  it('o H1 é o slogan', () => {
     expect(`${copy.hero.h1Before}${copy.hero.h1Highlight}`).toBe(copy.meta.slogan);
   });
 });

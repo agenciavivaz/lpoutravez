@@ -225,7 +225,7 @@ export function TourView({ state, handlers }: { state: TourState; handlers?: Tou
                       {n}
                     </span>
                     <span className="text-ink-100 text-[15px] leading-snug">
-                      <b className="text-white">{item.title}</b> — {item.text}
+                      <b className="text-white">{item.title}:</b> {item.text}
                     </span>
                   </button>
                 </li>

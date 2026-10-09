@@ -51,7 +51,7 @@ export function ThankYouDetails() {
     <>
       <p className="text-muted-foreground mt-5 text-lg leading-relaxed">
         {before}
-        <b className="text-foreground">{email ?? '—'}</b>
+        <b className="text-foreground">{email ?? ''}</b>
         {after}
       </p>
       {when ? (

@@ -5,7 +5,6 @@ import { ChannelBar } from '@/components/sections/channel-bar';
 import { Problem } from '@/components/sections/problem';
 import { HowItWorks } from '@/components/sections/how-it-works';
 import { ProductTourSection } from '@/components/sections/product-tour-section';
-import { Benefits } from '@/components/sections/benefits';
 import { Safety } from '@/components/sections/safety';
 import { SimulatorSection } from '@/components/sections/simulator-section';
 import { Comparison } from '@/components/sections/comparison';
@@ -27,7 +26,6 @@ export default function Home() {
         <Problem />
         <HowItWorks />
         <ProductTourSection />
-        <Benefits />
         <Safety />
         {site.features.simulator ? <SimulatorSection /> : null}
         <Comparison />

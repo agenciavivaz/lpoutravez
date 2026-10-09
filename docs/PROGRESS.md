@@ -42,7 +42,22 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - Flag `NEXT_PUBLIC_FEATURE_SIMULATOR` (padrão `true`). Carregamento tardio com os padrões já no HTML.
 - Verificado: lint, typecheck, 18 testes unitários, build, 38 testes E2E (padrões R$ 5.400 / 36 / R$ 835,02 / R$ 6,47, teclado nos sliders, digitação, passagem de valores, axe).
 
+## Fase 4 — Formulário e agendamento (adaptada, ADR-LP-12) ✅
+- Formulário em duas etapas com os textos e erros do PRD 9, máscara de WhatsApp, foco no primeiro erro, anúncio de etapa, retomada após recarregar, pré-preenchimento pelo simulador.
+- Envio por server action para `lib/crm/forward.ts` → `DEMO_WEBHOOK_URL` (CRM). Sem Supabase, Resend ou Turnstile, por decisão do Diego. Honeypot + 3 s mínimos.
+- Bling/"Não sei" → passo do calendário (Cal.com se `NEXT_PUBLIC_CAL_LINK` existir; senão, fallback com WhatsApp). Outros ERPs → `/lista-de-espera`.
+- Páginas `/obrigado`, `/lista-de-espera` (noindex), `/privacidade` e `/termos` (texto-base para revisão jurídica).
+- Eventos `demo_form_start`, `demo_form_step1`, `demo_form_step2`, `demo_waitlist`, `demo_scheduled`, `whatsapp_click` já vão para o `dataLayer` (GTM na Fase 5).
+- Verificado: lint, typecheck, 25 testes unitários, build, 50 testes E2E (erros, máscara, payload no CRM simulado, retomada, Bling, Omie, honeypot, simulador, /obrigado, páginas legais com axe). JS inicial da home: 149 KB.
+
+## Antes de divulgar a página
+- `DEMO_WEBHOOK_URL` na Vercel — sem isso, os pedidos de demo não chegam a lugar nenhum.
+- `NEXT_PUBLIC_WHATSAPP_NUMBER` na Vercel.
+- `NEXT_PUBLIC_CAL_LINK` (opcional: sem ele, o passo do calendário oferece o WhatsApp).
+
 ## Pendências e perguntas abertas (PRD 17)
+- E-mail de contato para a política de privacidade (`lib/site.ts` → `contactEmail`).
+- Revisão jurídica de `/privacidade`, `/termos`, seção "Sem arriscar sua conta" e FAQ 1 e 3 (pergunta 7).
 - Preço do crédito (R$ 0,30) e preços da Meta no simulador (pergunta 8) — confirmar antes do lançamento.
 - Aba Clientes, marcador ②: "segmento" trocado por "tipo de cliente" (glossário 4.5 vs. PRD 7.5) — confirmar a palavra.
 - Card "Eu mesmo faço a demo" (pergunta 4) — desligado até confirmar.
@@ -51,4 +66,4 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - Links "Política de privacidade" e "Termos de uso" do rodapé apontam para páginas da Fase 4.
 - Cal.com, WhatsApp, Supabase — Fase 4. Domínio — Fase 6.
 
-## Próxima: Fase 4 — Formulário, agendamento e dados (bloqueada: Cal.com, WhatsApp, Supabase)
+## Próxima: Fase 5 — Tracking, SEO e performance

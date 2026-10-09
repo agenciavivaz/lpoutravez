@@ -121,6 +121,8 @@ test.describe('Fase 1 — página estática completa', () => {
           const style = getComputedStyle(el);
           if (r.width === 0 || style.visibility === 'hidden' || el.closest('[inert]')) return false;
           if (el.classList.contains('sr-only')) return false;
+          // Links dentro de uma frase são isentos (WCAG 2.5.8, exceção "inline").
+          if (style.display === 'inline' && el.closest('p, label span')) return false;
           return r.height < 44 || r.width < 44;
         })
         .map((el) => el.textContent?.trim() || el.getAttribute('aria-label')),

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { copy, fill } from '@/lib/copy/pt-BR';
+import { privacy, terms } from '@/lib/copy/legal';
 
 function allStrings(value: unknown): string[] {
   if (typeof value === 'string') return [value];
@@ -11,6 +12,8 @@ function allStrings(value: unknown): string[] {
 }
 
 const strings = allStrings(copy);
+/** Textos legais: não precisam estar no PRD, mas seguem glossário e tom (4.4 e 4.5). */
+const glossaryStrings = [...strings, ...allStrings(privacy), ...allStrings(terms)];
 
 /** Desvios conscientes do texto do PRD, cada um registrado em docs/adr/. */
 const DEVIATIONS = new Set([
@@ -32,7 +35,7 @@ describe('lib/copy/pt-BR.ts', () => {
       /CRM de funil/i,
       /\bgrowth\b/i,
     ];
-    for (const text of strings) {
+    for (const text of glossaryStrings) {
       for (const pattern of forbidden) {
         expect(text, `"${text}" contém ${pattern}`).not.toMatch(pattern);
       }

@@ -39,7 +39,8 @@ test.describe('Página inicial', () => {
     await page.goto('/');
     await page.getByRole('link', { name: 'Agendar demo', exact: true }).click();
     await expect(page).toHaveURL(/#agendar$/);
-    await expect(page.locator('#agendar h2')).toBeFocused();
+    // PRD 5: o CTA rola até #agendar e foca o primeiro campo do formulário.
+    await expect(page.locator('#demo-name')).toBeFocused();
   });
 
   test('menu mobile abre com as âncoras', async ({ page }) => {

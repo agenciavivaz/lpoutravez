@@ -506,6 +506,21 @@ export const copy = {
       erpOther: 'Qual?',
       submit: 'Escolher horário',
     },
+    // Textos de apoio que o PRD 9 não define literalmente (erros extras, rótulos auxiliares).
+    ui: {
+      required: 'obrigatório',
+      optional: 'opcional',
+      selectPlaceholder: 'Escolha uma opção',
+      sending: 'Enviando…',
+      stepAnnounce: 'Etapa {step} de 2',
+      errors: {
+        storeName: 'Escreva o nome da loja.',
+        marketplaces: 'Escolha pelo menos um canal.',
+        orders: 'Escolha uma faixa de pedidos.',
+        erp: 'Escolha o ERP que você usa.',
+        generic: 'Algo deu errado do nosso lado. Tente de novo em alguns minutos.',
+      },
+    },
     calendar: {
       title: 'Escolha o melhor horário',
       subtitle: '30 minutos por videochamada.',

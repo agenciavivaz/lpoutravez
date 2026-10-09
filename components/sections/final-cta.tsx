@@ -1,9 +1,11 @@
 import { Check } from 'lucide-react';
 import { copy } from '@/lib/copy/pt-BR';
-import { site, whatsappHref } from '@/lib/site';
 import { Loop } from '@/components/brand/loop';
+import { WhatsAppLink } from '@/components/whatsapp-link';
+import { DemoFormLoader } from '@/components/form/demo-form-loader';
+import { ContactStep, EMPTY_CONTACT } from '@/components/form/steps';
 
-/** Faixa final (#agendar). O formulário entra na Fase 4 (PRD 9). */
+/** CTA final + formulário de agendamento (#agendar, PRD 6.12 e 9). */
 export function FinalCta() {
   const t = copy.finalCta;
   return (
@@ -15,16 +17,27 @@ export function FinalCta() {
       <Loop
         ringColor="rgb(255 255 255 / 0.12)"
         thickness={12}
-        className="absolute -right-44 -bottom-44 -z-10 size-[340px] sm:-right-24 sm:-bottom-28 sm:size-[460px]"
+        className="absolute -bottom-52 -left-44 -z-10 size-[340px] sm:-bottom-72 sm:-left-28 sm:size-[460px]"
       />
-      <div className="mx-auto max-w-[1200px] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <div className="max-w-[640px]">
+      <div className="mx-auto grid max-w-[1200px] gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:gap-x-16 lg:px-8 lg:py-24">
+        <div className="lg:col-start-1 lg:row-start-1">
           <p className="eyebrow eyebrow-on-dark">{t.eyebrow}</p>
-          <h2 id="agendar-title" className="section-h2 mt-4 text-white">
+          <h2 id="agendar-title" tabIndex={-1} className="section-h2 mt-4 text-white outline-none">
             {t.h2}
           </h2>
           <p className="text-ink-100 mt-4 text-lg">{t.subtitle}</p>
-          <ul className="mt-8 grid gap-3">
+        </div>
+
+        <div className="bg-warm-50 text-foreground rounded-[24px] p-5 shadow-[0_24px_60px_rgba(0,0,0,0.25)] sm:p-7 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+          <DemoFormLoader>
+            <div id="demo-form-card" data-step="contact">
+              <ContactStep values={EMPTY_CONTACT} errors={{}} honeypot="" />
+            </div>
+          </DemoFormLoader>
+        </div>
+
+        <div className="lg:col-start-1 lg:row-start-2">
+          <ul className="grid gap-3">
             {t.checks.map((item) => (
               <li key={item} className="flex items-center gap-3 font-semibold">
                 <Check className="text-coral-300 size-5 shrink-0" aria-hidden />
@@ -32,17 +45,9 @@ export function FinalCta() {
               </li>
             ))}
           </ul>
-          {site.whatsappNumber ? (
-            <a
-              href={whatsappHref(site.whatsappNumber, t.whatsappMessage)}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-whatsapp-location="final"
-              className="mt-8 inline-flex min-h-11 items-center gap-2 font-semibold underline underline-offset-4"
-            >
-              {t.whatsapp}
-            </a>
-          ) : null}
+          <WhatsAppLink location="final" className="mt-8 text-white">
+            {t.whatsapp}
+          </WhatsAppLink>
         </div>
       </div>
     </section>

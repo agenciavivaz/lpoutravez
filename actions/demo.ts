@@ -1,0 +1,127 @@
+'use server';
+
+import { headers } from 'next/headers';
+import { parseBrPhone } from '@/lib/phone';
+import {
+  MIN_FILL_MS,
+  isQualified,
+  validateContact,
+  validateStore,
+  type ContactInput,
+  type FieldErrors,
+  type StoreInput,
+} from '@/lib/validation/demo';
+import { forwardDemoRequest, type DemoRequestPayload } from '@/lib/crm/forward';
+
+/** Versão do texto da caixa de aceite (PRD 11.1, consent_text_version). */
+const CONSENT_TEXT_VERSION = '2026-10-08';
+
+type Meta = {
+  requestId: string;
+  /** Momento em que o formulário apareceu (ms). */
+  renderedAt: number;
+  /** Honeypot: campo `company_website`, invisível para pessoas. */
+  honeypot: string;
+  attribution: Record<string, string>;
+};
+
+export type ActionResult<T> =
+  { ok: true; next?: 'calendar' | 'waitlist' } | { ok: false; errors: FieldErrors<T> };
+
+const UUID = /^[0-9a-f-]{36}$/i;
+
+function isBot(meta: Meta): boolean {
+  return meta.honeypot.trim() !== '' || Date.now() - meta.renderedAt < MIN_FILL_MS;
+}
+
+function cleanAttribution(input: Record<string, string>): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(input ?? {})) {
+    if (
+      /^(utm_[a-z]+|gclid|fbclid|referrer|landing_path)$/.test(key) &&
+      typeof value === 'string'
+    ) {
+      out[key] = value.slice(0, 300);
+    }
+  }
+  return out;
+}
+
+function contactPayload(contact: ContactInput) {
+  return {
+    name: contact.name.trim().slice(0, 120),
+    whatsapp_e164: parseBrPhone(contact.whatsapp)!.e164,
+    email: contact.email.trim().toLowerCase().slice(0, 200),
+    consent_contact: contact.consent,
+    consent_text_version: CONSENT_TEXT_VERSION,
+  };
+}
+
+/** Etapa 1 (PRD 9.2): contato. Conversão secundária. */
+export async function submitContact(
+  contact: ContactInput,
+  meta: Meta,
+): Promise<ActionResult<ContactInput>> {
+  const errors = validateContact(contact);
+  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  if (!UUID.test(meta.requestId)) return { ok: false, errors: {} };
+  // Bot: responde como sucesso e não encaminha nada (PRD 9.6).
+  if (isBot(meta)) return { ok: true };
+
+  const payload: DemoRequestPayload = {
+    request_id: meta.requestId,
+    status: 'started',
+    step: 1,
+    submitted_at: new Date().toISOString(),
+    contact: contactPayload(contact),
+    attribution: cleanAttribution(meta.attribution),
+    user_agent: (await headers()).get('user-agent'),
+  };
+  await forwardDemoRequest(payload);
+  return { ok: true };
+}
+
+/** Etapa 2 (PRD 9.3): loja. Bling/"Não sei" → calendário; outro ERP → lista de espera. */
+export async function submitStore(
+  contact: ContactInput,
+  store: StoreInput,
+  simulator: { orders: number; ticket: number; rate: number } | null,
+  meta: Meta,
+): Promise<ActionResult<StoreInput>> {
+  const errors = validateStore(store);
+  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  if (Object.keys(validateContact(contact)).length > 0 || !UUID.test(meta.requestId)) {
+    return { ok: false, errors: {} };
+  }
+  const qualified = isQualified(store.erp);
+  const next = qualified ? 'calendar' : 'waitlist';
+  if (isBot(meta)) return { ok: true, next };
+
+  const snapshot =
+    simulator &&
+    [simulator.orders, simulator.ticket, simulator.rate].every(
+      (n) => typeof n === 'number' && Number.isFinite(n),
+    )
+      ? { orders: simulator.orders, ticket: simulator.ticket, rate: simulator.rate }
+      : null;
+
+  const payload: DemoRequestPayload = {
+    request_id: meta.requestId,
+    status: qualified ? 'qualified' : 'waitlist',
+    step: 2,
+    submitted_at: new Date().toISOString(),
+    contact: contactPayload(contact),
+    store: {
+      store_name: store.storeName.trim().slice(0, 120),
+      marketplaces: store.marketplaces.slice(0, 10),
+      orders_range: store.ordersRange,
+      erp: store.erp,
+      erp_other: store.erp === 'outro' ? store.erpOther.trim().slice(0, 80) || null : null,
+      simulator_snapshot: snapshot,
+    },
+    attribution: cleanAttribution(meta.attribution),
+    user_agent: (await headers()).get('user-agent'),
+  };
+  await forwardDemoRequest(payload);
+  return { ok: true, next };
+}

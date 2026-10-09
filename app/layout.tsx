@@ -4,6 +4,9 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { copy } from '@/lib/copy/pt-BR';
 import { isProduction, site } from '@/lib/site';
+import { CONSENT_DEFAULT_SCRIPT } from '@/lib/consent';
+import { ConsentBanner } from '@/components/consent/consent-banner';
+import { Gtm } from '@/components/consent/gtm';
 import './globals.css';
 
 const jakarta = Plus_Jakarta_Sans({
@@ -28,9 +31,15 @@ export const viewport: Viewport = {
   themeColor: '#F8F7F3',
 };
 
+const gtmId = process.env.NEXT_PUBLIC_GTM_ID || null;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" data-theme="light" className={jakarta.variable}>
+      <head>
+        {/* Consent Mode v2: padrão "denied" antes de qualquer tag (PRD 12.1). */}
+        <script dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULT_SCRIPT }} />
+      </head>
       <body className="min-h-dvh">
         <a
           href="#conteudo"
@@ -39,6 +48,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {copy.a11y.skipToContent}
         </a>
         {children}
+        <ConsentBanner />
+        {gtmId ? <Gtm id={gtmId} /> : null}
         <Analytics />
         <SpeedInsights />
       </body>

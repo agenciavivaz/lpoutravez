@@ -1,6 +1,7 @@
 import { copy, fill } from '@/lib/copy/pt-BR';
 import { site } from '@/lib/site';
 import { Logo } from '@/components/brand/logo';
+import { ConsentLink } from '@/components/consent/consent-link';
 
 export function Footer() {
   const t = copy.footer;
@@ -25,6 +26,9 @@ export function Footer() {
                 </a>
               </li>
             ))}
+            <li>
+              <ConsentLink className="hover:text-ink-900 flex min-h-11 items-center rounded-[10px] px-1 text-sm font-semibold underline-offset-4 hover:underline sm:px-2" />
+            </li>
           </ul>
         </nav>
         <div className="border-warm-300 text-warm-700 grid gap-2 border-t pt-6 text-sm lg:col-span-2">

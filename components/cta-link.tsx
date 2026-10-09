@@ -2,6 +2,7 @@
 
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
+import { track } from '@/lib/analytics/events';
 import { buttonVariants } from '@/components/ui/button-variants';
 
 export type CtaLocation =
@@ -36,6 +37,7 @@ export function CtaLink({
       className={cn(buttonVariants({ variant, size }), className)}
       onClick={(event) => {
         onClick?.(event);
+        if (target === '#agendar') track({ event: 'cta_click', location });
         if (event.defaultPrevented) return;
         const section = document.querySelector<HTMLElement>(target);
         if (!section) return;

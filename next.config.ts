@@ -36,6 +36,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // CSS inline no HTML: tira a folha de estilo do caminho crítico (LCP < 2 s, PRD 14.1).
+  experimental: { inlineCss: true },
   async headers() {
     return [
       {

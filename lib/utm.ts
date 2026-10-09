@@ -1,8 +1,9 @@
 /**
  * Origem da visita (PRD 3 e 11.1): UTMs, gclid, fbclid, referrer e página de entrada.
- * Primeira origem da sessão em sessionStorage. Cookie de 30 dias (`ov_utm`) só depois do
- * consentimento de análise — entra na Fase 5 com o banner.
+ * Primeira origem da sessão em sessionStorage. Com consentimento de análise, a primeira origem
+ * também fica no cookie `ov_utm` por 30 dias (PRD 11.1).
  */
+import { readConsent } from '@/lib/consent';
 
 export type Attribution = {
   utm_source?: string;
@@ -26,6 +27,8 @@ const KEYS = [
   'fbclid',
 ] as const;
 const STORAGE_KEY = 'ov_attribution';
+const COOKIE = 'ov_utm';
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 const MAX = 300;
 
 export function parseAttribution(search: string, referrer: string, path: string): Attribution {
@@ -40,15 +43,40 @@ export function parseAttribution(search: string, referrer: string, path: string)
   return result;
 }
 
-/** Guarda a primeira origem da sessão e devolve a que vale. */
+function readCookie(): Attribution | null {
+  const match = document.cookie.match(/(?:^|;\s*)ov_utm=([^;]+)/);
+  if (!match) return null;
+  try {
+    return JSON.parse(decodeURIComponent(match[1]!)) as Attribution;
+  } catch {
+    return null;
+  }
+}
+
+function hasCampaign(a: Attribution): boolean {
+  return Boolean(a.utm_source || a.utm_medium || a.utm_campaign || a.gclid || a.fbclid);
+}
+
+/** Guarda a primeira origem e devolve a que vale (cookie de 30 dias > sessão > URL atual). */
 export function captureAttribution(): Attribution {
   const current = parseAttribution(location.search, document.referrer, location.pathname);
+  let session: Attribution | null = null;
   try {
     const saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved) as Attribution;
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+    if (saved) session = JSON.parse(saved) as Attribution;
+    else sessionStorage.setItem(STORAGE_KEY, JSON.stringify(current));
   } catch {
     // sessionStorage indisponível: usa só a URL atual.
   }
-  return current;
+  const firstTouch = session ?? current;
+
+  if (readConsent()?.analytics) {
+    const stored = readCookie();
+    if (stored) return stored;
+    if (hasCampaign(firstTouch)) {
+      const secure = location.protocol === 'https:' ? '; Secure' : '';
+      document.cookie = `${COOKIE}=${encodeURIComponent(JSON.stringify(firstTouch))}; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${secure}`;
+    }
+  }
+  return firstTouch;
 }

@@ -9,6 +9,7 @@ import {
   type SimulatorInput,
   type SimulatorResult,
 } from '@/lib/simulator/calc';
+import { track } from '@/lib/analytics/events';
 import { SimulatorView, type DisplayNumbers } from './simulator-view';
 
 export const DEFAULT_INPUT: SimulatorInput = {
@@ -77,9 +78,13 @@ export function SimulatorInteractive({
   const target = useMemo(() => pick(result), [result]);
   const display = useCountTo(target);
 
+  // simulator_change com debounce de 1 s (PRD 12.2).
   useEffect(() => {
-    if (!onChangeDebounced || values === DEFAULT_INPUT) return;
-    const timer = setTimeout(() => onChangeDebounced(values), 1000);
+    if (values === DEFAULT_INPUT) return;
+    const timer = setTimeout(() => {
+      track({ event: 'simulator_change', ...values });
+      onChangeDebounced?.(values);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [values, onChangeDebounced]);
 

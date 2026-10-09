@@ -32,23 +32,32 @@ test.describe('Fase 1 — página estática completa', () => {
     for (const src of srcs) expect(src).toMatch(/logo-(horizontal|symbol)/);
   });
 
-  test('FAQ: uma aberta por vez e respostas no HTML', async ({ page }) => {
+  test('FAQ: uma aberta por vez, respostas no HTML e evento faq_open', async ({ page }) => {
     await page.goto('/');
     const faq = page.locator('#perguntas');
     // Respostas estão no HTML mesmo fechadas (indexáveis).
-    await expect(faq.locator('[data-slot="accordion-content"]')).toHaveCount(9);
+    await expect(faq.locator('details')).toHaveCount(9);
     expect(await page.content()).toContain('Só lemos pedidos, notas fiscais e contatos.');
-    await faq.getByRole('button', { name: 'Posso ser punido pelo marketplace?' }).click();
-    await expect(
-      faq.getByText('Nunca usamos o chat do marketplace.', { exact: false }),
-    ).toBeVisible();
-    await faq.getByRole('button', { name: 'Quanto custa?' }).click();
+    const first = faq.getByText('Nunca usamos o chat do marketplace.', { exact: false });
+    await faq.getByText('Posso ser punido pelo marketplace?').click();
+    await expect(first).toBeVisible();
+    await faq.getByText('Quanto custa?').click();
     await expect(
       faq.getByText('Depende do tamanho da sua operação.', { exact: false }),
     ).toBeVisible();
-    await expect(
-      faq.getByText('Nunca usamos o chat do marketplace.', { exact: false }),
-    ).toBeHidden();
+    await expect(first).toBeHidden();
+    const events = await page.evaluate(() =>
+      window.dataLayer?.filter((e) => e.event === 'faq_open').map((e) => e.question_id),
+    );
+    expect(events).toEqual(['punicao', 'preco']);
+  });
+
+  test('FAQ abre pelo teclado', async ({ page }) => {
+    await page.goto('/');
+    const summary = page.locator('#perguntas summary').first();
+    await summary.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#perguntas details').first()).toHaveAttribute('open', '');
   });
 
   test('comparação: tabela no desktop, cards no mobile', async ({ page }) => {
@@ -102,7 +111,7 @@ test.describe('Fase 1 — página estática completa', () => {
   test('axe sem violações com uma pergunta aberta e o menu fechado (768px)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1000 });
     await page.goto('/');
-    await page.getByRole('button', { name: 'Preciso usar o Bling?' }).click();
+    await page.locator('#perguntas').getByText('Preciso usar o Bling?').click();
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
       .analyze();

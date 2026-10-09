@@ -567,6 +567,18 @@ export const copy = {
     acceptAll: 'Aceitar todos',
     necessaryOnly: 'Só os necessários',
     configure: 'Configurar',
+    // Rótulos do painel "Configurar" e do link no rodapé (PRD 12.1 descreve, sem texto literal).
+    ui: {
+      region: 'Aviso de cookies',
+      necessary: 'Necessários',
+      necessaryText: 'Fazem o site funcionar. Sempre ligados.',
+      analytics: 'Análise',
+      analyticsText: 'Mostram como a página é usada, sem identificar você.',
+      ads: 'Publicidade',
+      adsText: 'Medem os resultados dos nossos anúncios.',
+      save: 'Salvar escolhas',
+      footerLink: 'Preferências de cookies',
+    },
   },
 } as const;
 

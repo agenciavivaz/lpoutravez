@@ -50,10 +50,20 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - Eventos `demo_form_start`, `demo_form_step1`, `demo_form_step2`, `demo_waitlist`, `demo_scheduled`, `whatsapp_click` já vão para o `dataLayer` (GTM na Fase 5).
 - Verificado: lint, typecheck, 25 testes unitários, build, 50 testes E2E (erros, máscara, payload no CRM simulado, retomada, Bling, Omie, honeypot, simulador, /obrigado, páginas legais com axe). JS inicial da home: 149 KB.
 
+## Fase 5 — Tracking, SEO e performance ✅
+- Banner LGPD próprio + Consent Mode v2 (padrão `denied`); GTM só depois da escolha e com `NEXT_PUBLIC_GTM_ID`; link "Preferências de cookies" no rodapé.
+- Todos os eventos da 12.2 no `dataLayer` (teste verifica): `cta_click`, `section_view`, `tour_tab_view`, `tour_hotspot`, `simulator_change`, `faq_open`, `demo_form_*`, `demo_waitlist`, `demo_scheduled`, `whatsapp_click`.
+- Cookie `ov_utm` (30 dias) com consentimento de análise.
+- SEO: metadata, canonical, sitemap, robots, JSON-LD (Organization, SoftwareApplication, FAQPage), imagem OG 1200×630, ícones 16/32/180/512.
+- Performance: Radix fora do bundle inicial (FAQ e menu nativos), CSS inline. JS inicial ~129 KB gzip. Lighthouse local mobile: desempenho 95–97, acessibilidade 100, CLS 0.
+- Verificado: lint, typecheck, 25 testes unitários, build, 60 testes E2E.
+
 ## Antes de divulgar a página
 - `DEMO_WEBHOOK_URL` na Vercel — sem isso, os pedidos de demo não chegam a lugar nenhum.
 - `NEXT_PUBLIC_WHATSAPP_NUMBER` na Vercel.
 - `NEXT_PUBLIC_CAL_LINK` (opcional: sem ele, o passo do calendário oferece o WhatsApp).
+- `NEXT_PUBLIC_GTM_ID` e, dentro do GTM, Meta Pixel/Google Ads exigindo `ad_storage` (ADR-LP-13).
+- `NEXT_PUBLIC_SITE_URL` com o domínio definitivo (canonical, sitemap, OG).
 
 ## Pendências e perguntas abertas (PRD 17)
 - E-mail de contato para a política de privacidade (`lib/site.ts` → `contactEmail`).
@@ -66,4 +76,4 @@ Produção: https://lpoutravez-d6bn.vercel.app (deploy automático a cada push n
 - Links "Política de privacidade" e "Termos de uso" do rodapé apontam para páginas da Fase 4.
 - Cal.com, WhatsApp, Supabase — Fase 4. Domínio — Fase 6.
 
-## Próxima: Fase 5 — Tracking, SEO e performance
+## Próxima: Fase 6 — QA e lançamento (domínio e CNPJ pendentes)

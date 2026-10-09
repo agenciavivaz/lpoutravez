@@ -51,6 +51,12 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.7
+      '@fontsource/arimo':
+        specifier: 5.2.5
+        version: 5.2.5
+      '@fontsource/plus-jakarta-sans':
+        specifier: 5.2.5
+        version: 5.2.5
       '@playwright/test':
         specifier: 1.56.1
         version: 1.56.1
@@ -340,6 +346,12 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@fontsource/arimo@5.2.5':
+    resolution: {integrity: sha512-oYItTqrWasegXqTsw1uLOl9Z18yNvxJKM1sPelTRzLHnuYmpEodjJLycj/oCi0lAK/PooMd/EpbIs8xkGOFz9w==}
+
+  '@fontsource/plus-jakarta-sans@5.2.5':
+    resolution: {integrity: sha512-2QBEymhsrpomwXrDygLwolOPOjRGDLDT+Pezo+SsnapcQ1z0n4qXzhC+EVmTZ0yxrQvqdc0kcb9EUd0eWmj9Jw==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -3537,6 +3549,10 @@ snapshots:
       react-dom: 19.3.0(react@19.3.0)
 
   '@floating-ui/utils@0.2.12': {}
+
+  '@fontsource/arimo@5.2.5': {}
+
+  '@fontsource/plus-jakarta-sans@5.2.5': {}
 
   '@humanfs/core@0.19.2':
     dependencies:

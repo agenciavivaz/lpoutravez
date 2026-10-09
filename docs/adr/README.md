@@ -14,3 +14,4 @@
 | [ADR-LP-10](ADR-LP-10-decisoes-da-fase-2.md) | Decisões de implementação da Fase 2 (tour) | Aceita |
 | [ADR-LP-11](ADR-LP-11-decisoes-da-fase-3.md) | Decisões de implementação da Fase 3 (simulador) | Aceita |
 | [ADR-LP-12](ADR-LP-12-formulario-sem-banco.md) | Formulário sem banco, com envio para o CRM | Aceita |
+| [ADR-LP-13](ADR-LP-13-decisoes-da-fase-5.md) | Tracking, SEO e performance | Aceita |

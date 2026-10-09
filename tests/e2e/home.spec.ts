@@ -50,5 +50,8 @@ test.describe('Página inicial', () => {
     const dialog = page.getByRole('dialog');
     await expect(dialog.getByRole('link', { name: 'Como funciona' })).toBeVisible();
     await expect(dialog.getByRole('link', { name: 'Perguntas' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeFocused();
   });
 });

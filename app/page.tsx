@@ -14,6 +14,8 @@ import { Faq } from '@/components/sections/faq';
 import { FinalCta } from '@/components/sections/final-cta';
 import { Footer } from '@/components/sections/footer';
 import { MobileCtaBar } from '@/components/sections/mobile-cta-bar';
+import { SectionViews } from '@/components/section-views';
+import { JsonLd } from '@/components/json-ld';
 
 export default function Home() {
   return (
@@ -35,6 +37,8 @@ export default function Home() {
       </main>
       <Footer />
       <MobileCtaBar />
+      <SectionViews />
+      <JsonLd />
     </>
   );
 }

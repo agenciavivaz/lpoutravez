@@ -7,7 +7,26 @@ export default defineConfig({
   fullyParallel: true,
   workers: 2,
   reporter: 'list',
-  use: { baseURL: `http://localhost:${PORT}` },
+  use: {
+    baseURL: `http://localhost:${PORT}`,
+    // Escolha de cookies já feita ("Só os necessários") para o banner não cobrir botões.
+    // Os testes de consentimento abrem um contexto limpo (tests/e2e/tracking.spec.ts).
+    storageState: {
+      cookies: [
+        {
+          name: 'ov_consent',
+          value: '0,0',
+          domain: 'localhost',
+          path: '/',
+          expires: -1,
+          httpOnly: false,
+          secure: false,
+          sameSite: 'Lax',
+        },
+      ],
+      origins: [],
+    },
+  },
   webServer: {
     command: `pnpm start -p ${PORT}`,
     port: PORT,

@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Menu } from 'lucide-react';
 import { copy } from '@/lib/copy/pt-BR';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/brand/logo';
 import { CtaLink } from '@/components/cta-link';
-import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { MobileMenu } from './mobile-menu';
 
 export function Header({ appUrl }: { appUrl: string | null }) {
   const [scrolled, setScrolled] = useState(false);
@@ -63,43 +62,7 @@ export function Header({ appUrl }: { appUrl: string | null }) {
           <CtaLink location="header" className="px-3 sm:px-4">
             {copy.cta.header}
           </CtaLink>
-          <Sheet>
-            <SheetTrigger
-              aria-label={copy.a11y.openMenu}
-              className="hover:bg-secondary grid size-11 place-items-center rounded-[10px] lg:hidden"
-            >
-              <Menu className="size-5" aria-hidden />
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-card w-[min(20rem,85vw)] p-6 pt-16">
-              <SheetTitle className="sr-only">{copy.a11y.menuTitle}</SheetTitle>
-              <nav aria-label={copy.a11y.mainNav}>
-                <ul className="flex flex-col gap-1">
-                  {copy.header.nav.map((item) => (
-                    <li key={item.href}>
-                      <SheetClose asChild>
-                        <a
-                          href={item.href}
-                          className="hover:bg-secondary flex min-h-12 items-center rounded-[10px] px-3 text-base font-semibold"
-                        >
-                          {item.label}
-                        </a>
-                      </SheetClose>
-                    </li>
-                  ))}
-                  {appUrl ? (
-                    <li>
-                      <a
-                        href={appUrl}
-                        className="text-muted-foreground hover:bg-secondary flex min-h-12 items-center rounded-[10px] px-3 text-base font-semibold"
-                      >
-                        {copy.header.signIn}
-                      </a>
-                    </li>
-                  ) : null}
-                </ul>
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <MobileMenu appUrl={appUrl} />
         </div>
       </div>
     </header>

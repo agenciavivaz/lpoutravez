@@ -35,6 +35,8 @@
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
     "@eslint/eslintrc": "^3",
+    "@fontsource/arimo": "5.2.5",
+    "@fontsource/plus-jakarta-sans": "5.2.5",
     "@playwright/test": "1.56.1",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "^22",

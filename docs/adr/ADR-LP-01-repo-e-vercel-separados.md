@@ -2,7 +2,7 @@
 
 **Status:** aceita · 09/10/2026
 
-**Decisão:** a LP vive em `agenciavivaz/lpoutravez`, com projeto Vercel próprio (`lpoutravez.vercel.app` até o domínio ser definido). O app fica em `agenciavivaz/CRM_Marketplace`.
+**Decisão:** a LP vive em `agenciavivaz/lpoutravez`, com projeto Vercel próprio (`lpoutravez-d6bn.vercel.app` até o domínio ser definido). O app fica em `agenciavivaz/CRM_Marketplace`.
 
 **Por quê:** deploy, domínio e ritmo de mudança independentes; a LP nunca derruba o app.
 

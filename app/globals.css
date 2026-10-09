@@ -255,3 +255,68 @@
     font-weight: 800;
   }
 }
+
+/* Animações de entrada (PRD 6.1 e 6.4). prefers-reduced-motion zera a duração (estado final). */
+@theme {
+  --animate-wa-in: wa-in 250ms var(--ease-brand) both;
+  --animate-pop-in: pop-in 400ms var(--ease-brand) both;
+
+  @keyframes wa-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@keyframes loop-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* "Como funciona": laço que completa a volta e nó 1 que pulsa (ver how-it-works-loop.tsx). */
+[data-loop-stage] [data-return-arc] {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--duration-celebration) var(--ease-brand);
+}
+[data-loop-stage] [data-return-tip] {
+  transition: opacity var(--duration-micro) var(--ease-brand) 450ms;
+}
+[data-loop-stage='armed'] [data-return-arc] {
+  stroke-dashoffset: 100;
+}
+[data-loop-stage='armed'] [data-return-tip] {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+[data-loop-stage='done'] :is([data-node='1'], [data-node-list='1']) {
+  animation: pulse-once var(--duration-celebration) var(--ease-brand) 500ms 1;
+}
+
+@keyframes pulse-once {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(232 93 74 / 0);
+  }
+  40% {
+    box-shadow: 0 0 0 12px rgb(232 93 74 / 0.28);
+  }
+}

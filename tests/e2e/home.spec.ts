@@ -22,7 +22,9 @@ test.describe('Página inicial', () => {
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .analyze();
-      expect(results.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
+      expect(
+        results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(' | ')}`),
+      ).toEqual([]);
     });
   }
 

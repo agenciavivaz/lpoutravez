@@ -12,6 +12,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        // Primário sobre faixa escura (ink-900/950): o `primary` do tema escuro do tokens.json.
+        inverse: 'bg-ink-300 text-ink-950 hover:bg-ink-200',
         destructive: 'bg-destructive text-white hover:bg-destructive/90',
         outline: 'border border-border bg-card text-foreground hover:bg-secondary',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',

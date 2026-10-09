@@ -10,3 +10,4 @@
 | [ADR-LP-06](ADR-LP-06-tour-com-componentes.md) | Telas do tour como componentes, não imagens | Aceita |
 | [ADR-LP-07](ADR-LP-07-gtm-consent-mode.md) | GTM + Consent Mode v2 com banner LGPD | Aceita |
 | [ADR-LP-08](ADR-LP-08-decisoes-da-fase-0.md) | Decisões de implementação da Fase 0 | Aceita |
+| [ADR-LP-09](ADR-LP-09-decisoes-da-fase-1.md) | Decisões de implementação da Fase 1 | Aceita |

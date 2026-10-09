@@ -6,7 +6,10 @@ function flag(value: string | undefined, fallback: boolean): boolean {
 }
 
 export const site = {
-  url: (process.env.NEXT_PUBLIC_SITE_URL || 'https://lpoutravez.vercel.app').replace(/\/$/, ''),
+  url: (process.env.NEXT_PUBLIC_SITE_URL || 'https://lpoutravez-d6bn.vercel.app').replace(
+    /\/$/,
+    '',
+  ),
   /** Link "Entrar" no header só aparece quando existe. */
   appUrl: process.env.NEXT_PUBLIC_APP_URL || null,
   /** E.164 sem "+". Sem número, o link de WhatsApp não aparece. */
@@ -16,6 +19,8 @@ export const site = {
   features: {
     simulator: flag(process.env.NEXT_PUBLIC_FEATURE_SIMULATOR, true),
     pilot: flag(process.env.NEXT_PUBLIC_FEATURE_PILOT, false),
+    /** [confirmar Diego] Card "Eu mesmo faço a demo" — PRD 17, pergunta 4. */
+    hostCard: false,
   },
 } as const;
 

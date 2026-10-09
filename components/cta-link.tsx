@@ -11,7 +11,7 @@ type CtaLinkProps = Omit<ComponentProps<'a'>, 'href'> & {
   location: CtaLocation;
   /** Âncora de destino. Padrão: formulário de agendamento. */
   target?: `#${string}`;
-  variant?: 'default' | 'outline';
+  variant?: 'default' | 'outline' | 'inverse';
   size?: 'default' | 'lg';
 };
 

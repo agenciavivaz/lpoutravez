@@ -426,7 +426,7 @@ export const copy = {
       { label: 'Termos de uso', href: '/termos' },
     ],
     // [confirmar Diego] CNPJ.
-    legal: 'Outra Vez é um produto da Vivaz · CNPJ {cnpj}',
+    legal: 'Outra Vez é um produto da Vivaz · CNPJ {CNPJ_VIVAZ}',
     trademarks:
       'Mercado Livre, Shopee, Amazon, Magalu e Bling são marcas de seus respectivos donos. O Outra Vez não é afiliado a elas.',
   },

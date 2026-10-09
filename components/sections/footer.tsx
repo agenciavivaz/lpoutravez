@@ -4,8 +4,8 @@ import { Logo } from '@/components/brand/logo';
 
 export function Footer() {
   const t = copy.footer;
-  // Sem CNPJ confirmado, a linha legal sai sem o trecho " · CNPJ {cnpj}" (PRD 17, pergunta 6).
-  const legal = site.cnpj ? fill(t.legal, { cnpj: site.cnpj }) : t.legal.split(' · CNPJ')[0];
+  // Sem CNPJ confirmado, a linha legal sai sem o trecho " · CNPJ {CNPJ_VIVAZ}" (PRD 17, pergunta 6).
+  const legal = site.cnpj ? fill(t.legal, { CNPJ_VIVAZ: site.cnpj }) : t.legal.split(' · CNPJ')[0];
   return (
     <footer className="bg-warm-200 text-foreground">
       <div className="mx-auto grid max-w-[1200px] gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_auto] lg:px-8">

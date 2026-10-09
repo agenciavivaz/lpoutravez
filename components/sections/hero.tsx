@@ -1,6 +1,9 @@
 import { copy } from '@/lib/copy/pt-BR';
 import { CtaLink } from '@/components/cta-link';
 import { Loop } from '@/components/brand/loop';
+import { ChannelChip } from '@/components/outra-vez/channel-chip';
+import { KpiCard } from '@/components/outra-vez/kpi-card';
+import { WhatsAppPreview, type WhatsAppItem } from '@/components/outra-vez/whatsapp-preview';
 import { LoopUnderline } from '@/components/brand/loop-underline';
 
 export function Hero() {
@@ -35,13 +38,57 @@ export function Hero() {
           <p className="text-muted-foreground mt-4 text-sm tabular-nums">{t.microcopy}</p>
         </div>
 
-        <div
-          data-slot="hero-visual"
-          className="relative mx-auto flex aspect-square w-full max-w-[200px] items-center justify-center sm:max-w-[280px] lg:max-w-[420px]"
-        >
-          <Loop ringColor="var(--color-coral-100)" thickness={13} className="size-full" />
-        </div>
+        <HeroVisual />
       </div>
     </section>
+  );
+}
+
+const BUBBLES_START_MS = 200;
+
+function HeroVisual() {
+  const v = copy.hero.visual;
+  const items: WhatsAppItem[] = [
+    { type: 'message', from: 'business', text: v.bubble1, buttons: v.bubble1Buttons },
+    { type: 'message', from: 'customer', text: v.reply },
+    { type: 'separator', label: v.dateSeparator },
+    { type: 'message', from: 'business', text: v.bubble2, buttons: [v.bubble2Button] },
+  ];
+  // O card "Comprou de novo" entra depois da última bolha; o laço completa a volta junto.
+  const finaleMs = BUBBLES_START_MS + items.length * 150 + 150;
+
+  return (
+    <figure
+      data-slot="hero-visual"
+      className="relative mx-auto w-full max-w-[330px] lg:max-w-[360px]"
+    >
+      <Loop
+        ringColor="var(--color-coral-100)"
+        thickness={11}
+        drawTipDelayMs={finaleMs}
+        className="absolute top-[42%] left-1/2 -z-10 size-[125%] max-w-none -translate-x-[40%] -translate-y-1/2"
+      />
+      <div className="border-warm-900 overflow-hidden rounded-[36px] border-[8px] bg-[#E8F2E7] shadow-[0_18px_50px_rgba(24,24,23,0.18)]">
+        <WhatsAppPreview
+          storeName="Loja Exemplo"
+          items={items}
+          animated
+          delayMs={BUBBLES_START_MS}
+          className="min-h-[600px]"
+        />
+      </div>
+      <KpiCard
+        compact
+        label={v.kpiLabel}
+        value={v.kpiValue}
+        tone="money"
+        footer={<ChannelChip channel={v.kpiChannel} size="sm" />}
+        className="animate-pop-in absolute bottom-6 -left-3 w-[170px] shadow-[0_12px_40px_rgba(24,24,23,0.14)] sm:-left-12"
+        style={{ animationDelay: `${finaleMs}ms` }}
+      />
+      <figcaption className="text-muted-foreground mt-4 text-right text-xs sm:text-center">
+        {v.caption}
+      </figcaption>
+    </figure>
   );
 }

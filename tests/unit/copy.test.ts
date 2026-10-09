@@ -47,22 +47,43 @@ describe('lib/copy/pt-BR.ts', () => {
     expect(source).not.toMatch(/depoimento/i);
   });
 
-  it('mantém textos-chave da seção 6 exatamente como no PRD', () => {
+  it('todo texto visível existe literalmente no PRD (seções 6, 12.1 e 13)', () => {
     const prd = readFileSync(join(process.cwd(), 'docs/PRD_LP.md'), 'utf8');
-    const exact = [
-      copy.hero.eyebrow,
-      copy.hero.subtitle,
-      copy.hero.microcopy,
-      copy.problem.h2,
-      copy.howItWorks.h2,
-      copy.tour.subtitle,
-      copy.safety.subtitle,
-      copy.simulator.disclaimer,
-      copy.finalCta.h2,
-      copy.footer.trademarks,
-      ...copy.faq.items.map((item) => item.q),
-    ];
-    for (const text of exact) expect(prd, text).toContain(text);
+    // Chaves que não são texto do PRD: ícones, ids, âncoras, valores internos e rótulos de acessibilidade.
+    const skipKeys = new Set([
+      'icon',
+      'id',
+      'href',
+      'value',
+      'kind',
+      'cells',
+      'a11y',
+      'whatsappMessage',
+    ]);
+    const missing: string[] = [];
+    const walk = (value: unknown, path: string) => {
+      if (typeof value === 'string') {
+        if (value.trim() && !prd.includes(value)) missing.push(`${path}: "${value}"`);
+        return;
+      }
+      if (Array.isArray(value)) return value.forEach((v, i) => walk(v, `${path}[${i}]`));
+      if (value && typeof value === 'object') {
+        for (const [key, v] of Object.entries(value)) {
+          if (!skipKeys.has(key)) walk(v, path ? `${path}.${key}` : key);
+        }
+      }
+    };
+    walk(copy, '');
+    expect(missing).toEqual([]);
+    // No PRD a mensagem do WhatsApp aparece já codificada na URL.
+    expect(prd).toContain(encodeURIComponent(copy.finalCta.whatsappMessage));
+  });
+
+  it('cards de número leem como no PRD', () => {
+    const prd = readFileSync(join(process.cwd(), 'docs/PRD_LP.md'), 'utf8');
+    for (const card of copy.benefits.cards) {
+      if (card.kind !== 'icon') expect(prd).toContain(`${card.number} ${card.title}`);
+    }
     expect(`${copy.hero.h1Before}${copy.hero.h1Highlight}`).toBe(copy.meta.slogan);
   });
 });

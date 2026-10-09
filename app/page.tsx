@@ -6,6 +6,8 @@ import { Problem } from '@/components/sections/problem';
 import { HowItWorks } from '@/components/sections/how-it-works';
 import { ProductTourSection } from '@/components/sections/product-tour-section';
 import { Safety } from '@/components/sections/safety';
+import { Route } from '@/components/sections/route';
+import { Integrations } from '@/components/sections/integrations';
 import { SimulatorSection } from '@/components/sections/simulator-section';
 import { Comparison } from '@/components/sections/comparison';
 import { Demo } from '@/components/sections/demo';
@@ -25,9 +27,11 @@ export default function Home() {
         <ChannelBar />
         <Problem />
         <HowItWorks />
+        <Route />
+        {site.features.simulator ? <SimulatorSection /> : null}
         <ProductTourSection />
         <Safety />
-        {site.features.simulator ? <SimulatorSection /> : null}
+        <Integrations />
         <Comparison />
         <Demo />
         <Faq />

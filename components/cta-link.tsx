@@ -6,7 +6,7 @@ import { track } from '@/lib/analytics/events';
 import { buttonVariants } from '@/components/ui/button-variants';
 
 export type CtaLocation =
-  'header' | 'hero' | 'tour' | 'benefits' | 'demo' | 'final' | 'mobile_bar' | 'simulator';
+  'header' | 'hero' | 'tour' | 'integrations' | 'demo' | 'final' | 'mobile_bar' | 'simulator';
 
 type CtaLinkProps = Omit<ComponentProps<'a'>, 'href'> & {
   location: CtaLocation;

@@ -15,7 +15,8 @@ export type AnalyticsEvent =
   | { event: 'demo_form_step2'; orders_range: string; erp: string; qualified: boolean }
   | { event: 'demo_waitlist'; erp: string }
   | { event: 'demo_scheduled' }
-  | { event: 'whatsapp_click'; location: string };
+  | { event: 'whatsapp_click'; location: string }
+  | { event: 'erp_other_click' };
 
 declare global {
   interface Window {

@@ -31,7 +31,7 @@ export function Hero() {
             <CtaLink location="hero" size="lg">
               {copy.cta.primary}
             </CtaLink>
-            <CtaLink location="hero" target="#por-dentro" variant="outline" size="lg">
+            <CtaLink location="hero" target="#como-funciona" variant="outline" size="lg">
               {copy.cta.secondaryHero}
             </CtaLink>
           </div>

@@ -10,8 +10,7 @@ const f = copy.form;
 
 export const EMPTY_CONTACT: ContactInput = { name: '', whatsapp: '', email: '', consent: false };
 export const EMPTY_STORE: StoreInput = {
-  storeName: '',
-  marketplaces: [],
+  site: '',
   ordersRange: '',
   erp: '',
   erpOther: '',
@@ -59,7 +58,7 @@ export type ContactStepProps = {
   };
 };
 
-/** Etapa 1 — Contato (PRD 9.2). */
+/** Etapa 1: contato (PRD 9.2). */
 export function ContactStep({
   values,
   errors,
@@ -168,13 +167,12 @@ export type StoreStepProps = {
   formError?: string;
   handlers: {
     onChange: <K extends keyof StoreInput>(field: K, value: StoreInput[K]) => void;
-    onToggleMarketplace: (value: string) => void;
     onBack: () => void;
     onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   };
 };
 
-/** Etapa 2 — Sua loja (PRD 9.3). Só existe na versão interativa. */
+/** Etapa 2: site, ERP e pedidos por mês (PRD v2 9.13). Só existe na versão interativa. */
 export function StoreStep({ values, errors, pending, formError, handlers }: StoreStepProps) {
   const t = f.step2;
   return (
@@ -191,32 +189,12 @@ export function StoreStep({ values, errors, pending, formError, handlers }: Stor
       </StepHeader>
       <div className="grid gap-5">
         <TextField
-          id="demo-store"
-          label={t.storeName}
-          autoComplete="organization"
-          value={values.storeName}
-          onChange={(e) => handlers.onChange('storeName', e.target.value)}
-          error={errors.storeName}
-        />
-        <ChoiceGroup
-          id="demo-marketplaces"
-          legend={t.marketplaces}
-          type="checkbox"
-          name="marketplaces"
-          appearance="chips"
-          options={t.marketplaceOptions.map((m) => ({ value: m, label: m }))}
-          selected={values.marketplaces}
-          onToggle={handlers.onToggleMarketplace}
-          error={errors.marketplaces}
-        />
-        <SelectField
-          id="demo-orders"
-          label={t.orders}
-          placeholder={f.ui.selectPlaceholder}
-          options={t.ordersOptions}
-          value={values.ordersRange}
-          onChange={(e) => handlers.onChange('ordersRange', e.target.value)}
-          error={errors.ordersRange}
+          id="demo-site"
+          label={t.site}
+          hint={<span className="text-muted-foreground font-normal"> ({f.ui.optional})</span>}
+          autoComplete="url"
+          value={values.site}
+          onChange={(e) => handlers.onChange('site', e.target.value)}
         />
         <ChoiceGroup
           id="demo-erp"
@@ -238,6 +216,15 @@ export function StoreStep({ values, errors, pending, formError, handlers }: Stor
             onChange={(e) => handlers.onChange('erpOther', e.target.value)}
           />
         ) : null}
+        <SelectField
+          id="demo-orders"
+          label={t.orders}
+          placeholder={f.ui.selectPlaceholder}
+          options={t.ordersOptions}
+          value={values.ordersRange}
+          onChange={(e) => handlers.onChange('ordersRange', e.target.value)}
+          error={errors.ordersRange}
+        />
       </div>
       {formError ? (
         <p role="alert" className="text-destructive mt-4 text-sm font-semibold">

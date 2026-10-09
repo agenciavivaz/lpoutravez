@@ -6,7 +6,7 @@ import 'server-only';
  * Quando o CRM tiver API própria, troque só esta função.
  */
 
-export type DemoStatus = 'started' | 'qualified' | 'waitlist' | 'spam';
+export type DemoStatus = 'started' | 'qualified' | 'spam';
 
 export type DemoRequestPayload = {
   request_id: string;
@@ -21,8 +21,7 @@ export type DemoRequestPayload = {
     consent_text_version: string;
   };
   store?: {
-    store_name: string;
-    marketplaces: string[];
+    site: string | null;
     orders_range: string;
     erp: string;
     erp_other: string | null;

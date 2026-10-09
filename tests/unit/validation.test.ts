@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isQualified, validateContact, validateStore } from '@/lib/validation/demo';
+import { ERPS, validateContact, validateStore } from '@/lib/validation/demo';
 import { maskPhoneInput, parseBrPhone } from '@/lib/phone';
 
 const okContact = {
@@ -43,33 +43,20 @@ describe('validação da etapa 1 (PRD 9.2)', () => {
   });
 });
 
-describe('validação da etapa 2 (PRD 9.3)', () => {
-  const okStore = {
-    storeName: 'Loja da Ana',
-    marketplaces: ['Shopee'],
-    ordersRange: '1000_3000',
-    erp: 'bling',
-    erpOther: '',
-  };
+describe('validação da etapa 2 (PRD v2 9.13)', () => {
+  const okStore = { site: '', ordersRange: '1000_3000', erp: 'bling', erpOther: '' };
 
-  it('aceita loja válida', () => {
+  it('aceita etapa válida com site vazio (opcional)', () => {
     expect(validateStore(okStore)).toEqual({});
+    expect(validateStore({ ...okStore, site: 'casalavanda.com.br' })).toEqual({});
   });
 
-  it('exige ao menos um canal, faixa e ERP conhecidos', () => {
-    const errors = validateStore({
-      ...okStore,
-      marketplaces: ['Inventado'],
-      ordersRange: 'x',
-      erp: 'y',
-    });
-    expect(Object.keys(errors).sort()).toEqual(['erp', 'marketplaces', 'ordersRange']);
+  it('exige faixa e ERP conhecidos', () => {
+    const errors = validateStore({ ...okStore, ordersRange: 'x', erp: 'y' });
+    expect(Object.keys(errors).sort()).toEqual(['erp', 'ordersRange']);
   });
 
-  it('Bling e "Não sei" vão para o calendário; o resto para a lista de espera', () => {
-    expect(isQualified('bling')).toBe(true);
-    expect(isQualified('nao_sei')).toBe(true);
-    for (const erp of ['tiny_olist', 'omie', 'outro', 'nenhum'])
-      expect(isQualified(erp)).toBe(false);
+  it('ERPs do select: Bling, Tiny, Omie, UpSeller, Outro', () => {
+    expect(ERPS).toEqual(['bling', 'tiny', 'omie', 'upseller', 'outro']);
   });
 });

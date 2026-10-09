@@ -18,9 +18,8 @@ export type AnalyticsEvent =
   | { event: 'calc_category_change'; category: string }
   | { event: 'faq_open'; question_id: string }
   | { event: 'demo_form_start' }
-  | { event: 'demo_form_step1' }
-  | { event: 'demo_form_step2'; orders_range: string; erp: string; qualified: boolean }
-  | { event: 'demo_waitlist'; erp: string }
+  | { event: 'form_step1_submit' }
+  | { event: 'form_step2_submit'; orders_range: string; erp: string }
   | { event: 'demo_scheduled' }
   | { event: 'whatsapp_click'; location: string }
   | { event: 'erp_other_click' };

@@ -5,14 +5,14 @@ function flag(value: string | undefined, fallback: boolean): boolean {
   return value === 'true';
 }
 
+/** Endereço canônico da LP (PRD v2 10). Não depende de env: preview e produção apontam para cá. */
+export const CANONICAL_URL = 'https://www.outravez.com.br';
+
 export const site = {
-  url: (process.env.NEXT_PUBLIC_SITE_URL || 'https://lpoutravez-d6bn.vercel.app').replace(
-    /\/$/,
-    '',
-  ),
+  url: (process.env.NEXT_PUBLIC_SITE_URL || CANONICAL_URL).replace(/\/$/, ''),
   /** Link "Entrar" no header só aparece quando existe. */
   appUrl: process.env.NEXT_PUBLIC_APP_URL || null,
-  /** E.164 sem "+". [confirmar Diego] Sem número, o link abre o WhatsApp só com a mensagem. */
+  /** E.164 sem "+" (ex.: 5511987654321). [confirmar Diego] Sem número, os links de WhatsApp somem. */
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || null,
   /** Evento do Cal.com (ex.: diego/demo-outra-vez). Sem ele, o passo do calendário mostra o WhatsApp. */
   calLink: process.env.NEXT_PUBLIC_CAL_LINK || null,
@@ -30,7 +30,15 @@ export const site = {
 
 export const isProduction = process.env.VERCEL_ENV === 'production';
 
-/** Link do WhatsApp (PRD 6.12). Sem número configurado, abre o WhatsApp só com a mensagem. */
-export function whatsappHref(message: string, number: string | null = site.whatsappNumber): string {
-  return `https://wa.me/${number ?? ''}?text=${encodeURIComponent(message)}`;
+/**
+ * Link do WhatsApp (PRD v2 9.13): `wa.me/55DDDNUMERO?text=...`. Sem número configurado devolve
+ * null, e quem chama não mostra o link (um `wa.me/` sem número não leva a lugar nenhum).
+ */
+export function whatsappHref(
+  message: string,
+  number: string | null = site.whatsappNumber,
+): string | null {
+  const digits = number?.replace(/\D/g, '') ?? '';
+  if (digits.length < 12) return null;
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }

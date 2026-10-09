@@ -547,18 +547,8 @@ export const copy = {
     step2: {
       indicator: '2 de 2',
       back: 'Voltar',
-      storeName: 'Nome da loja',
-      marketplaces: 'Onde você vende?',
-      marketplaceOptions: [
-        'Mercado Livre',
-        'Shopee',
-        'Amazon',
-        'Magalu',
-        'TikTok Shop',
-        'Loja própria',
-        'Outro',
-      ],
-      orders: 'Quantos pedidos por mês, somando todos os canais?',
+      site: 'Site ou loja',
+      orders: 'Pedidos por mês',
       ordersOptions: [
         { value: 'ate_300', label: 'Até 300' },
         { value: '300_1000', label: '300 a 1.000' },
@@ -569,11 +559,10 @@ export const copy = {
       erp: 'Qual ERP você usa?',
       erpOptions: [
         { value: 'bling', label: 'Bling' },
-        { value: 'tiny_olist', label: 'Tiny/Olist' },
+        { value: 'tiny', label: 'Tiny' },
         { value: 'omie', label: 'Omie' },
+        { value: 'upseller', label: 'UpSeller' },
         { value: 'outro', label: 'Outro' },
-        { value: 'nenhum', label: 'Não uso ERP' },
-        { value: 'nao_sei', label: 'Não sei' },
       ],
       erpOther: 'Qual?',
       submit: 'Escolher horário',
@@ -586,8 +575,6 @@ export const copy = {
       sending: 'Enviando…',
       stepAnnounce: 'Etapa {step} de 2',
       errors: {
-        storeName: 'Escreva o nome da loja.',
-        marketplaces: 'Escolha pelo menos um canal.',
         orders: 'Escolha uma faixa de pedidos.',
         erp: 'Escolha o ERP que você usa.',
         generic: 'Algo deu errado do nosso lado. Tente de novo em alguns minutos.',
@@ -628,12 +615,6 @@ export const copy = {
     text: 'Você vai receber a confirmação e o link da videochamada no e-mail {email}. Quer adiantar? Separe quantos pedidos sua loja faz por mês e quais produtos seus clientes costumam comprar de novo.',
     when: '{data} às {hora}',
     addToCalendar: 'Adicionar ao calendário',
-    back: 'Voltar para o início',
-  },
-
-  waitlist: {
-    h1: 'Você está na lista.',
-    text: 'Por enquanto o Outra Vez funciona com o Bling. Assim que chegar ao {erp}, você é um dos primeiros a saber.',
     back: 'Voltar para o início',
   },
 

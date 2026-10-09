@@ -31,6 +31,7 @@ export function CalendarStep({
   onBooked: (booking: BookingInfo) => void;
 }) {
   const calLink = site.calLink;
+  const waHref = whatsappHref(copy.finalCta.whatsappMessage);
   const [Cal, setCal] = useState<ComponentType<CalProps> | null>(null);
   const [failed, setFailed] = useState(!calLink);
   const [ready, setReady] = useState(false);
@@ -99,16 +100,18 @@ export function CalendarStep({
       {failed ? (
         <div className="mt-6">
           <p className="text-foreground leading-relaxed">{t.fallback}</p>
-          <a
-            href={whatsappHref(copy.finalCta.whatsappMessage)}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track({ event: 'whatsapp_click', location: 'calendar_fallback' })}
-            className="bg-whatsapp mt-4 inline-flex min-h-12 items-center gap-2 rounded-[12px] px-5 font-extrabold text-[#0B2E17]"
-          >
-            <MessageCircle className="size-5" aria-hidden />
-            {t.fallbackButton}
-          </a>
+          {waHref ? (
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track({ event: 'whatsapp_click', location: 'calendar_fallback' })}
+              className="bg-whatsapp mt-4 inline-flex min-h-12 items-center gap-2 rounded-[12px] px-5 font-extrabold text-[#0B2E17]"
+            >
+              <MessageCircle className="size-5" aria-hidden />
+              {t.fallbackButton}
+            </a>
+          ) : null}
         </div>
       ) : (
         <div

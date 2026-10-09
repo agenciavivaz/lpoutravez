@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { copy } from '@/lib/copy/pt-BR';
-import { isProduction, site } from '@/lib/site';
+import { CANONICAL_URL, isProduction, site } from '@/lib/site';
 import { CONSENT_DEFAULT_SCRIPT } from '@/lib/consent';
 import { ConsentBanner } from '@/components/consent/consent-banner';
 import { Gtm } from '@/components/consent/gtm';
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: copy.meta.title,
   description: copy.meta.description,
-  alternates: { canonical: '/' },
+  alternates: { canonical: CANONICAL_URL },
   // Previews e builds locais não são indexados (PRD 10.4).
   robots: isProduction ? { index: true, follow: true } : { index: false, follow: false },
 };

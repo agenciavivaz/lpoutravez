@@ -5,8 +5,9 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 type Stage = 'static' | 'armed' | 'done';
 
 /**
- * Microinteração do "Como funciona" (PRD 6.4): quando o nó 5 entra na tela, o laço completa a
- * volta e o nó 1 pulsa uma vez. Sem JS ou com prefers-reduced-motion, mostra o estado final.
+ * Microinteração do "Como funciona" (PRD v2 11.3.3): quando o passo 5 entra na tela, a seta de
+ * retorno se desenha até o passo 3 e ele pulsa uma vez. Sem JS ou com prefers-reduced-motion,
+ * mostra o estado final.
  */
 export function LoopStage({ className, children }: { className?: string; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);

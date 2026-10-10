@@ -107,7 +107,7 @@ export function describeScreen(tabId: TabId): string {
     clientes: `${customer.name}, ${customer.city}. ${customer.channels.join(' e ')}. ${customer.labels.totalSpent}: ${formatMoney(customerTotal)}. Última compra: Comprou de novo na Shopee, Kit Refil Lavanda.`,
     reguas: `${journey.title}, ${journey.status}. ${formatNumber(journey.inJourney)} ${journey.labels.inJourney}; ${journey.boughtAgain30d} ${journey.labels.boughtAgain}.`,
     whatsapp:
-      'Conversa da Loja Exemplo com Maria: aviso do pedido faturado com os botões Quero receber e Não, obrigado; Maria responde Quero receber; 42 dias depois, aviso de reposição do Kit Refil Lavanda com o botão Ver produto.',
+      'Conversa da Casa Lavanda com Maria: aviso do pedido faturado com os botões Quero receber e Não, obrigado; Maria responde Quero receber; 42 dias depois, aviso de reposição do Kit Refil Lavanda com o botão Ver produto.',
     envio: `Enviar "${bulkSend.template}" para ${formatNumber(bulkSend.recipients)} clientes? Custo estimado no WhatsApp: ${formatMoney(bulkSend.estimatedCost)}. ${bulkSend.excluded} clientes ficam de fora.`,
     bling: `${onboarding.title}: passo ${onboarding.current} de ${onboarding.steps.length}. ${onboarding.ready}`,
   };

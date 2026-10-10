@@ -24,7 +24,6 @@ export function Safety() {
           </li>
         ))}
       </ul>
-      <p className="text-muted-foreground mt-10 text-sm">{t.footnote}</p>
     </Section>
   );
 }

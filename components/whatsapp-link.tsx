@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * Link "Prefere falar pelo WhatsApp?" (PRD 6.12): abre em nova aba e dispara `whatsapp_click`.
- * O número vem de NEXT_PUBLIC_WHATSAPP_NUMBER (a definir).
+ * O número vem de NEXT_PUBLIC_WHATSAPP_NUMBER; sem ele, o link não aparece.
  */
 export function WhatsAppLink({
   location,
@@ -20,9 +20,11 @@ export function WhatsAppLink({
   className?: string;
   children: ReactNode;
 }) {
+  const href = whatsappHref(copy.finalCta.whatsappMessage);
+  if (!href) return null;
   return (
     <a
-      href={whatsappHref(copy.finalCta.whatsappMessage)}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       data-whatsapp-location={location}

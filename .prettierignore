@@ -2,3 +2,5 @@ brand/
 docs/
 pnpm-lock.yaml
 .next/
+.tmp
+.claude

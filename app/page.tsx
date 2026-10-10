@@ -5,9 +5,10 @@ import { ChannelBar } from '@/components/sections/channel-bar';
 import { Problem } from '@/components/sections/problem';
 import { HowItWorks } from '@/components/sections/how-it-works';
 import { ProductTourSection } from '@/components/sections/product-tour-section';
-import { Benefits } from '@/components/sections/benefits';
 import { Safety } from '@/components/sections/safety';
-import { SimulatorSection } from '@/components/sections/simulator-section';
+import { Route } from '@/components/sections/route';
+import { Integrations } from '@/components/sections/integrations';
+import { CalculatorSection } from '@/components/sections/calculator-section';
 import { Comparison } from '@/components/sections/comparison';
 import { Demo } from '@/components/sections/demo';
 import { Faq } from '@/components/sections/faq';
@@ -26,10 +27,11 @@ export default function Home() {
         <ChannelBar />
         <Problem />
         <HowItWorks />
+        <Route />
+        {site.features.simulator ? <CalculatorSection /> : null}
         <ProductTourSection />
-        <Benefits />
         <Safety />
-        {site.features.simulator ? <SimulatorSection /> : null}
+        <Integrations />
         <Comparison />
         <Demo />
         <Faq />

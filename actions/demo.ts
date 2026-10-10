@@ -4,13 +4,13 @@ import { headers } from 'next/headers';
 import { parseBrPhone } from '@/lib/phone';
 import {
   MIN_FILL_MS,
-  isQualified,
   validateContact,
   validateStore,
   type ContactInput,
   type FieldErrors,
   type StoreInput,
 } from '@/lib/validation/demo';
+import { CATEGORY_IDS } from '@/lib/calculator';
 import { forwardDemoRequest, type DemoRequestPayload } from '@/lib/crm/forward';
 
 /** Versão do texto da caixa de aceite (PRD 11.1, consent_text_version). */
@@ -26,7 +26,7 @@ type Meta = {
 };
 
 export type ActionResult<T> =
-  { ok: true; next?: 'calendar' | 'waitlist' } | { ok: false; errors: FieldErrors<T> };
+  { ok: true; next?: 'calendar' } | { ok: false; errors: FieldErrors<T> };
 
 const UUID = /^[0-9a-f-]{36}$/i;
 
@@ -81,11 +81,11 @@ export async function submitContact(
   return { ok: true };
 }
 
-/** Etapa 2 (PRD 9.3): loja. Bling/"Não sei" → calendário; outro ERP → lista de espera. */
+/** Etapa 2 (PRD v2 9.13): site, ERP e pedidos. Sempre segue para o calendário. */
 export async function submitStore(
   contact: ContactInput,
   store: StoreInput,
-  simulator: { orders: number; ticket: number; rate: number } | null,
+  calculator: { orders: number; ticket: number; category: string } | null,
   meta: Meta,
 ): Promise<ActionResult<StoreInput>> {
   const errors = validateStore(store);
@@ -93,31 +93,36 @@ export async function submitStore(
   if (Object.keys(validateContact(contact)).length > 0 || !UUID.test(meta.requestId)) {
     return { ok: false, errors: {} };
   }
-  const qualified = isQualified(store.erp);
-  const next = qualified ? 'calendar' : 'waitlist';
+  // Todo ERP segue para o calendário: o Bling já está ativo, os demais conectamos na implantação.
+  const next = 'calendar' as const;
   if (isBot(meta)) return { ok: true, next };
 
-  const snapshot =
-    simulator &&
-    [simulator.orders, simulator.ticket, simulator.rate].every(
+  // Campos ocultos da calculadora (PRD v2 8.6).
+  const calc =
+    calculator &&
+    [calculator.orders, calculator.ticket].every(
       (n) => typeof n === 'number' && Number.isFinite(n),
-    )
-      ? { orders: simulator.orders, ticket: simulator.ticket, rate: simulator.rate }
+    ) &&
+    (CATEGORY_IDS as readonly string[]).includes(calculator.category)
+      ? {
+          calc_pedidos: Math.round(calculator.orders),
+          calc_ticket: Math.round(calculator.ticket),
+          calc_categoria: calculator.category,
+        }
       : null;
 
   const payload: DemoRequestPayload = {
     request_id: meta.requestId,
-    status: qualified ? 'qualified' : 'waitlist',
+    status: 'qualified',
     step: 2,
     submitted_at: new Date().toISOString(),
     contact: contactPayload(contact),
     store: {
-      store_name: store.storeName.trim().slice(0, 120),
-      marketplaces: store.marketplaces.slice(0, 10),
+      site: store.site.trim().slice(0, 200) || null,
       orders_range: store.ordersRange,
       erp: store.erp,
       erp_other: store.erp === 'outro' ? store.erpOther.trim().slice(0, 80) || null : null,
-      simulator_snapshot: snapshot,
+      calculator: calc,
     },
     attribution: cleanAttribution(meta.attribution),
     user_agent: (await headers()).get('user-agent'),

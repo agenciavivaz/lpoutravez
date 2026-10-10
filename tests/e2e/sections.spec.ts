@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 test.describe('Fase 1 — página estática completa', () => {
-  test('tem todas as seções na ordem do PRD 5', async ({ page }) => {
+  test('tem todas as seções na ordem da PRD v2 9', async ({ page }) => {
     await page.goto('/');
     const ids = await page
       .locator('main > section[id]')
@@ -11,39 +11,79 @@ test.describe('Fase 1 — página estática completa', () => {
       'inicio',
       'problema',
       'como-funciona',
+      'rota-de-recompra',
+      'faca-as-contas',
       'por-dentro',
-      'o-que-muda',
       'seguranca',
-      'simulador',
+      'integracoes',
       'comparacao',
       'demo',
       'perguntas',
       'agendar',
     ]);
     // Um H2 por seção (exceto hero, que tem o H1).
-    await expect(page.locator('main h2')).toHaveCount(10);
+    await expect(page.locator('main h2')).toHaveCount(11);
   });
 
-  test('só tem imagens da marca (nenhum logo de marketplace)', async ({ page }) => {
+  test('só tem imagens da marca; logos de terceiros só na faixa e em Integrações (PRD v2 7)', async ({
+    page,
+  }) => {
     await page.goto('/');
     const srcs = await page
       .locator('img')
       .evaluateAll((els) => els.map((el) => (el as HTMLImageElement).getAttribute('src') ?? ''));
     for (const src of srcs) expect(src).toMatch(/logo-(horizontal|symbol)/);
+    const logos = page.locator('[data-brand-logo]');
+    const outside = await logos.evaluateAll(
+      (els) =>
+        els.filter(
+          (el) => !el.closest('section[aria-label="Marketplaces compatíveis"], #integracoes'),
+        ).length,
+    );
+    expect(outside).toBe(0);
+    // Monocromático: o símbolo é pintado com currentColor (cor do texto), nunca cor de marca.
+    const colors = await logos.evaluateAll((els) =>
+      els.map((el) => getComputedStyle(el).backgroundColor === getComputedStyle(el).color),
+    );
+    expect(colors.every(Boolean)).toBe(true);
+  });
+
+  test('rota de recompra e integrações (PRD v2 5.2 e 6)', async ({ page }) => {
+    await page.goto('/');
+    const rota = page.locator('#rota-de-recompra');
+    await expect(rota.locator('[data-route]')).toHaveCount(3);
+    await expect(rota.locator('[data-route="marketplace"]')).toContainText('Padrão');
+    await expect(rota).toContainText(
+      'O marketplace é a rota padrão. O seu canal só entra para clientes que aceitaram receber novidades.',
+    );
+    const integ = page.locator('#integracoes');
+    await expect(integ.locator('[data-erp="bling"]')).toContainText('Integração ativa');
+    await expect(integ.getByText('Integração ativa')).toHaveCount(1);
+    await expect(integ.getByText('Conectamos na implantação')).toHaveCount(7);
+    expect(await page.content()).not.toMatch(/integração nativa/i);
+  });
+
+  test('"O que muda" não existe mais e não há travessão no texto da página', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#o-que-muda')).toHaveCount(0);
+    const text = await page.locator('body').innerText();
+    expect(text).not.toMatch(/[\u2013\u2014]/);
+    const head = await page.locator('head').innerHTML();
+    expect(head).not.toMatch(/[\u2013\u2014]/);
   });
 
   test('FAQ: uma aberta por vez, respostas no HTML e evento faq_open', async ({ page }) => {
     await page.goto('/');
     const faq = page.locator('#perguntas');
     // Respostas estão no HTML mesmo fechadas (indexáveis).
-    await expect(faq.locator('details')).toHaveCount(9);
-    expect(await page.content()).toContain('Só lemos pedidos, notas fiscais e contatos.');
-    const first = faq.getByText('Nunca usamos o chat do marketplace.', { exact: false });
+    await expect(faq.locator('details')).toHaveCount(10);
+    expect(await page.content()).toContain('Só lemos pedidos, notas e contatos.');
+    const first = faq.getByText('Nunca usamos o chat do marketplace,', { exact: false });
     await faq.getByText('Posso ser punido pelo marketplace?').click();
     await expect(first).toBeVisible();
     await faq.getByText('Quanto custa?').click();
     await expect(
-      faq.getByText('Depende do tamanho da sua operação.', { exact: false }),
+      faq.getByText('Depende do volume da sua operação.', { exact: false }),
     ).toBeVisible();
     await expect(first).toBeHidden();
     const events = await page.evaluate(() =>
@@ -60,13 +100,22 @@ test.describe('Fase 1 — página estática completa', () => {
     await expect(page.locator('#perguntas details').first()).toHaveAttribute('open', '');
   });
 
-  test('comparação: tabela no desktop, cards no mobile', async ({ page }) => {
+  test('comparação: tabela no desktop, abas no mobile (PRD v2 9.10)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     await expect(page.locator('#comparacao table')).toBeVisible();
+    await expect(page.locator('#comparacao table')).not.toContainText('Funciona bem no celular');
     await page.setViewportSize({ width: 360, height: 800 });
     await expect(page.locator('#comparacao table')).toBeHidden();
-    await expect(page.locator('#comparacao li h3')).toHaveCount(4);
+    const tabs = page.locator('#comparacao [role="tab"]');
+    await expect(tabs).toHaveText(['Planilha do ERP', 'WhatsApp Web + extensão', 'CRM genérico']);
+    const panel = page.locator('#comparacao [role="tabpanel"]');
+    await expect(panel).toContainText('Planilha do ERP');
+    await tabs.first().focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
+    await expect(panel).toContainText('WhatsApp Web + extensão');
+    await expect(panel).toContainText('Outra Vez');
   });
 
   test('barra de CTA do mobile aparece depois do hero e some em #agendar', async ({ page }) => {
@@ -99,7 +148,7 @@ test.describe('Fase 1 — página estática completa', () => {
     await context.close();
   });
 
-  test('o laço do "Como funciona" completa quando o nó 5 aparece', async ({ page }) => {
+  test('a seta do "Como funciona" (5 → 3) completa quando o passo 5 aparece', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     const stage = page.locator('[data-loop-stage]');
@@ -111,7 +160,7 @@ test.describe('Fase 1 — página estática completa', () => {
   test('axe sem violações com uma pergunta aberta e o menu fechado (768px)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1000 });
     await page.goto('/');
-    await page.locator('#perguntas').getByText('Preciso usar o Bling?').click();
+    await page.locator('#perguntas').getByText('Funciona com o meu ERP?').click();
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
       .analyze();
@@ -137,5 +186,37 @@ test.describe('Fase 1 — página estática completa', () => {
         .map((el) => el.textContent?.trim() || el.getAttribute('aria-label')),
     );
     expect(small).toEqual([]);
+  });
+});
+
+test.describe('Faixa "Funciona com" (PRD v2 11.3.2)', () => {
+  test('mobile: rola, pausa pelo botão e fica parada com reduced motion', async ({ browser }) => {
+    const moving = await browser.newContext({ viewport: { width: 390, height: 800 } });
+    const page = await moving.newPage();
+    await page.goto('/');
+    const marquee = page.locator('[data-marquee]');
+    const track = marquee.locator('[data-marquee-track]');
+    expect(await track.evaluate((el) => getComputedStyle(el).animationName)).toBe('marquee');
+    await marquee.getByRole('button', { name: 'Pausar a rolagem dos logos' }).click();
+    await expect(marquee).toHaveAttribute('data-paused', 'true');
+    expect(await track.evaluate((el) => getComputedStyle(el).animationPlayState)).toBe('paused');
+    await moving.close();
+
+    const still = await browser.newContext({
+      viewport: { width: 390, height: 800 },
+      reducedMotion: 'reduce',
+    });
+    const quiet = await still.newPage();
+    await quiet.goto('/');
+    const quietTrack = quiet.locator('[data-marquee-track]');
+    expect(await quietTrack.evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+    await expect(quiet.locator('[data-marquee-pause]')).toBeHidden();
+    await still.close();
+  });
+
+  test('desktop: estática', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await expect(page.locator('[data-marquee]')).toBeHidden();
   });
 });

@@ -157,8 +157,8 @@ export function TourView({ state, handlers }: { state: TourState; handlers?: Tou
                 className={cn(
                   'min-h-11 shrink-0 rounded-full border px-4 text-sm font-bold whitespace-nowrap transition-colors duration-150',
                   selected
-                    ? 'bg-ink-300 border-ink-300 text-ink-950'
-                    : 'text-ink-100 border-white/15 bg-white/5 hover:bg-white/10',
+                    ? 'bg-primary border-primary text-primary-foreground'
+                    : 'border-border bg-card text-foreground hover:bg-secondary',
                 )}
               >
                 {t.label}
@@ -200,8 +200,8 @@ export function TourView({ state, handlers }: { state: TourState; handlers?: Tou
           key={`legend-${tabId}`}
           className={cn('order-2 lg:order-1', animate && 'animate-wa-in')}
         >
-          <h3 className="text-2xl font-extrabold text-white">{tab.title}</h3>
-          <p className="text-ink-100 mt-3 leading-relaxed">{tab.text}</p>
+          <h3 className="text-ink-900 text-2xl font-extrabold">{tab.title}</h3>
+          <p className="text-muted-foreground mt-3 leading-relaxed">{tab.text}</p>
           <ol className="mt-6 grid gap-2">
             {tab.hotspots.map((item, index) => {
               const n = index + 1;
@@ -218,14 +218,14 @@ export function TourView({ state, handlers }: { state: TourState; handlers?: Tou
                     onClick={handlers ? () => handlers.onToggle(n) : undefined}
                     className={cn(
                       'flex min-h-11 w-full gap-3 rounded-[14px] p-3 text-left transition-colors duration-150',
-                      highlighted ? 'bg-white/10' : 'hover:bg-white/5',
+                      highlighted ? 'bg-secondary' : 'hover:bg-secondary/60',
                     )}
                   >
                     <span className="bg-coral-500 text-ink-950 grid size-6 shrink-0 place-items-center rounded-full text-sm font-extrabold tabular-nums">
                       {n}
                     </span>
-                    <span className="text-ink-100 text-[15px] leading-snug">
-                      <b className="text-white">{item.title}</b> — {item.text}
+                    <span className="text-muted-foreground text-[15px] leading-snug">
+                      <b className="text-ink-900">{item.title}:</b> {item.text}
                     </span>
                   </button>
                 </li>
@@ -280,7 +280,7 @@ function Toggle({
     <div
       role="group"
       aria-label={label}
-      className={cn('flex rounded-full border border-white/15 bg-white/5 p-1', className)}
+      className={cn('border-border bg-card flex rounded-full border p-1', className)}
     >
       {options.map(({ value: optionValue, text, Icon }) => {
         const pressed = optionValue === value;
@@ -292,7 +292,7 @@ function Toggle({
             onClick={onChange ? () => onChange(optionValue) : undefined}
             className={cn(
               'inline-flex min-h-11 items-center gap-1.5 rounded-full px-3.5 text-sm font-bold transition-colors duration-150',
-              pressed ? 'bg-ink-300 text-ink-950' : 'text-ink-100 hover:bg-white/10',
+              pressed ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-secondary',
             )}
           >
             <Icon className="size-4" aria-hidden />

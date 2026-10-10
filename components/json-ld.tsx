@@ -1,8 +1,8 @@
 import { copy } from '@/lib/copy/pt-BR';
-import { site } from '@/lib/site';
+import { CANONICAL_URL } from '@/lib/site';
 
 /**
- * Dados estruturados (PRD 13): Organization, SoftwareApplication (sem aggregateRating — não há
+ * Dados estruturados (PRD 13): Organization, SoftwareApplication (sem aggregateRating: não há
  * avaliações) e FAQPage com as 9 perguntas.
  */
 export function JsonLd() {
@@ -11,10 +11,10 @@ export function JsonLd() {
     '@graph': [
       {
         '@type': 'Organization',
-        '@id': `${site.url}/#organization`,
+        '@id': `${CANONICAL_URL}/#organization`,
         name: 'Outra Vez',
-        url: site.url,
-        logo: `${site.url}/apple-icon`,
+        url: CANONICAL_URL,
+        logo: `${CANONICAL_URL}/apple-icon`,
         parentOrganization: { '@type': 'Organization', name: 'Vivaz' },
       },
       {
@@ -23,9 +23,11 @@ export function JsonLd() {
         applicationCategory: 'BusinessApplication',
         operatingSystem: 'Web',
         description: copy.meta.description,
-        url: site.url,
+        url: CANONICAL_URL,
+        // Sem preço público (PRD v2 14): a assinatura aparece na demo.
+        featureList: copy.howItWorks.steps.map((step) => step.title),
         inLanguage: 'pt-BR',
-        publisher: { '@id': `${site.url}/#organization` },
+        publisher: { '@id': `${CANONICAL_URL}/#organization` },
       },
       {
         '@type': 'FAQPage',

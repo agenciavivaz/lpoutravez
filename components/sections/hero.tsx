@@ -31,7 +31,7 @@ export function Hero() {
             <CtaLink location="hero" size="lg">
               {copy.cta.primary}
             </CtaLink>
-            <CtaLink location="hero" target="#por-dentro" variant="outline" size="lg">
+            <CtaLink location="hero" target="#como-funciona" variant="outline" size="lg">
               {copy.cta.secondaryHero}
             </CtaLink>
           </div>
@@ -70,7 +70,7 @@ function HeroVisual() {
       />
       <div className="border-warm-900 overflow-hidden rounded-[36px] border-[8px] bg-[#E8F2E7] shadow-[0_18px_50px_rgba(24,24,23,0.18)]">
         <WhatsAppPreview
-          storeName="Loja Exemplo"
+          storeName={v.storeName}
           items={items}
           animated
           delayMs={BUBBLES_START_MS}

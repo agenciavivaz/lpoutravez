@@ -95,9 +95,7 @@ test.describe('Fase 5 — consentimento e eventos', () => {
 });
 
 test.describe('Fase 5 — eventos do dataLayer (PRD 12.2)', () => {
-  test('cta_click, section_view, tour_tab_view, tour_hotspot e simulator_change', async ({
-    page,
-  }) => {
+  test('cta_click, section_view, tour_tab_view, tour_hotspot e calc_*', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     await page.getByRole('link', { name: 'Agendar demo grátis' }).first().click();
@@ -108,14 +106,15 @@ test.describe('Fase 5 — eventos do dataLayer (PRD 12.2)', () => {
       .getByRole('button', { name: /Marcador 2:/ })
       .locator('visible=true')
       .click();
-    await page.locator('#simulador').scrollIntoViewIfNeeded();
-    await expect(page.locator('[data-simulator-ready]')).toHaveAttribute(
-      'data-simulator-ready',
+    await page.locator('#faca-as-contas').scrollIntoViewIfNeeded();
+    await expect(page.locator('[data-calculator-ready]')).toHaveAttribute(
+      'data-calculator-ready',
       'true',
     );
-    await page.getByRole('slider', { name: 'Ticket médio' }).focus();
-    await page.keyboard.press('ArrowRight');
+    const calc = page.locator('#faca-as-contas');
+    await calc.locator('label', { hasText: 'Suplementos e saúde' }).click();
     await page.waitForTimeout(1300);
+    await calc.getByRole('link', { name: 'Agendar demo com os meus números' }).click();
 
     const events = await layer(page);
     expect(events).toContainEqual({ event: 'cta_click', location: 'hero' });
@@ -127,11 +126,20 @@ test.describe('Fase 5 — eventos do dataLayer (PRD 12.2)', () => {
       theme: 'light',
     });
     expect(events).toContainEqual({ event: 'tour_hotspot', tab: 'reguas', hotspot: 2 });
+    expect(events).toContainEqual({ event: 'calc_category_change', category: 'suplementos' });
     expect(events).toContainEqual({
-      event: 'simulator_change',
+      event: 'calc_interact',
       orders: 2000,
-      ticket: 160,
-      rate: 3,
+      ticket: 150,
+      category: 'suplementos',
+      own_channel: 0,
+    });
+    expect(events).toContainEqual({
+      event: 'calc_cta_click',
+      orders: 2000,
+      ticket: 150,
+      category: 'suplementos',
+      own_channel: 0,
     });
     const sections = events.filter((e) => e.event === 'section_view').map((e) => e.section);
     expect(new Set(sections).size).toBe(sections.length);
@@ -139,21 +147,27 @@ test.describe('Fase 5 — eventos do dataLayer (PRD 12.2)', () => {
 });
 
 test.describe('Fase 5 — SEO', () => {
-  test('metadata, JSON-LD com 9 perguntas e OG 1200×630', async ({ page, request }) => {
+  test('metadata, JSON-LD com 10 perguntas e OG 1200×630 (PRD v2 10)', async ({
+    page,
+    request,
+  }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle('Outra Vez — CRM para quem vende em marketplace');
-    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
-      'content',
-      /^Transforme as notas fiscais do Bling/,
-    );
+    await expect(page).toHaveTitle('Outra Vez | CRM para quem vende em marketplace');
+    const description = await page.locator('meta[name="description"]').getAttribute('content');
+    expect(description).toMatch(/^Identifique quem comprou de você no Mercado Livre/);
+    expect(description!.length).toBeLessThanOrEqual(160);
     await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/$|vercel\.app$/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      'https://www.outravez.com.br',
+    );
     const ld = JSON.parse(
       (await page.locator('script[type="application/ld+json"]').textContent()) ?? '{}',
     );
     const types = ld['@graph'].map((n: { '@type': string }) => n['@type']);
     expect(types).toEqual(['Organization', 'SoftwareApplication', 'FAQPage']);
-    expect(ld['@graph'][2].mainEntity).toHaveLength(9);
+    expect(ld['@graph'][2].mainEntity).toHaveLength(10);
+    expect(JSON.stringify(ld)).not.toMatch(/[\u2013\u2014]/);
     expect(JSON.stringify(ld)).not.toContain('aggregateRating');
     const og = await page.locator('meta[property="og:image"]').getAttribute('content');
     const image = await request.get(new URL(og!).pathname + new URL(og!).search);
@@ -171,7 +185,7 @@ test.describe('Fase 5 — SEO', () => {
   test('sitemap lista /, /privacidade e /termos', async ({ request }) => {
     const xml = await (await request.get('/sitemap.xml')).text();
     for (const path of ['', '/privacidade', '/termos'])
-      expect(xml).toContain(`vercel.app${path}</loc>`);
+      expect(xml).toContain(`https://www.outravez.com.br${path}</loc>`);
     expect(xml).not.toContain('obrigado');
   });
 

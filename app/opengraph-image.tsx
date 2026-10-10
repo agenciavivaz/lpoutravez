@@ -1,12 +1,13 @@
 import { ImageResponse } from 'next/og';
 import { copy } from '@/lib/copy/pt-BR';
+import { MARKETPLACES } from '@/lib/brands';
 import { arimoBold, brandSvgDataUri, jakarta } from '@/lib/og/assets';
 
 export const alt = copy.meta.title;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-/** Imagem OG (PRD 13): fundo ink-900, laço coral, slogan em branco, logo negativo. */
+/** Imagem OG (PRD 13 e v2 10): fundo ink-900, laço coral, slogan, faixa "Funciona com" e logo negativo. */
 export default async function OpengraphImage() {
   const [symbol, font800, logoFont] = await Promise.all([
     brandSvgDataUri('logo-symbol'),
@@ -71,6 +72,23 @@ export default async function OpengraphImage() {
           Venda&nbsp;
           <span style={{ color: '#FFA18C' }}>outra vez.</span>
         </span>
+        {/* Faixa "Funciona com" em monocromático (PRD v2 10): só nomes, sem cor de marca. */}
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 26,
+            marginTop: 40,
+            fontSize: 26,
+            letterSpacing: '-0.01em',
+            color: 'rgba(255,255,255,0.62)',
+          }}
+        >
+          <span style={{ color: '#FFFFFF' }}>{copy.logoStrip.label}</span>
+          {MARKETPLACES.map((brand) => (
+            <span key={brand.id}>{brand.name}</span>
+          ))}
+        </div>
       </div>
     </div>,
     {

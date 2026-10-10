@@ -10,7 +10,6 @@ const e2 = copy.form.ui.errors;
 
 export const ORDERS_RANGES = copy.form.step2.ordersOptions.map((o) => o.value);
 export const ERPS = copy.form.step2.erpOptions.map((o) => o.value);
-export const MARKETPLACES = copy.form.step2.marketplaceOptions;
 
 export type OrdersRange = (typeof ORDERS_RANGES)[number];
 export type Erp = (typeof ERPS)[number];
@@ -23,8 +22,8 @@ export type ContactInput = {
 };
 
 export type StoreInput = {
-  storeName: string;
-  marketplaces: string[];
+  /** Site ou loja (opcional). */
+  site: string;
   ordersRange: string;
   erp: string;
   erpOther: string;
@@ -49,18 +48,10 @@ export function validateContact(input: ContactInput): FieldErrors<ContactInput> 
 
 export function validateStore(input: StoreInput): FieldErrors<StoreInput> {
   const errors: FieldErrors<StoreInput> = {};
-  if (input.storeName.trim().length < 1) errors.storeName = e2.storeName;
-  const valid = input.marketplaces.filter((m) => (MARKETPLACES as readonly string[]).includes(m));
-  if (valid.length === 0) errors.marketplaces = e2.marketplaces;
   if (!(ORDERS_RANGES as readonly string[]).includes(input.ordersRange))
     errors.ordersRange = e2.orders;
   if (!(ERPS as readonly string[]).includes(input.erp)) errors.erp = e2.erp;
   return errors;
-}
-
-/** Bling ou "Não sei" seguem para o calendário; o resto vai para a lista de espera (PRD 9.1). */
-export function isQualified(erp: string): boolean {
-  return erp === 'bling' || erp === 'nao_sei';
 }
 
 /** Tempo mínimo entre renderizar e enviar (anti-spam, PRD 9.6). */

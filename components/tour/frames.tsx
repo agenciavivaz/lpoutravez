@@ -7,7 +7,7 @@ export function PhoneFrame({ className, children }: { className?: string; childr
     <div
       data-slot="phone-frame"
       className={cn(
-        'border-warm-900 bg-warm-900 overflow-hidden rounded-[36px] border-[8px] shadow-[0_18px_50px_rgba(0,0,0,0.35)]',
+        'border-warm-900 bg-warm-900 overflow-hidden rounded-[36px] border-[8px] shadow-[0_18px_50px_rgba(24,24,23,0.18)]',
         className,
       )}
     >
@@ -30,7 +30,7 @@ export function BrowserFrame({
     <div
       data-slot="browser-frame"
       className={cn(
-        'border-border bg-card overflow-hidden rounded-[20px] border shadow-[0_18px_50px_rgba(0,0,0,0.35)]',
+        'border-border bg-card overflow-hidden rounded-[20px] border shadow-[0_18px_50px_rgba(24,24,23,0.18)]',
         className,
       )}
     >

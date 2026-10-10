@@ -1,14 +1,14 @@
 /**
  * Loja de exemplo do tour "Conheça por dentro" e do hero (PRD_LP 7.5).
- * Os números FECHAM entre si — tests/unit/loja-exemplo.test.ts confere. Não altere um sem
- * ajustar os outros. Textos de interface do produto seguem o PRD do app (seções 14.2–14.10).
+ * Os números FECHAM entre si: tests/unit/loja-exemplo.test.ts confere. Não altere um sem
+ * ajustar os outros. Textos de interface do produto seguem o PRD do app (seções 14.2 a 14.10).
  * Toda tela que usa estes dados leva o rótulo "Dados de uma loja de exemplo."
  */
 
 export type Channel = 'Mercado Livre' | 'Shopee' | 'Amazon';
 
 export const store = {
-  name: 'Loja Exemplo',
+  name: 'Casa Lavanda',
   user: 'Diego',
   channels: ['Mercado Livre', 'Shopee', 'Amazon'] as Channel[],
   period: 'Últimos 30 dias',
@@ -20,7 +20,7 @@ export const appNav = {
   bottom: ['Início', 'Clientes', 'Réguas', 'Envios', 'Mais'],
 } as const;
 
-// ——— Aba 1 — Início ———
+// --- Aba 1: Início ---
 export const dashboard = {
   pageLabel: 'Início',
   greeting: 'Bom dia, Diego',
@@ -59,7 +59,7 @@ export function percent(part: number, total: number): number {
   return Math.round((part / total) * 100);
 }
 
-// ——— Aba 2 — Clientes ———
+// --- Aba 2: Clientes ---
 export type TimelineEvent = {
   date: string; // ISO yyyy-mm-dd
   kind: 'repurchase' | 'click' | 'message' | 'order' | 'consent';
@@ -171,10 +171,10 @@ export const customerTotal =
   Math.round(customerOrders.reduce((sum, e) => sum + (e.amount ?? 0), 0) * 100) / 100;
 export const customerAvgTicket = Math.round((customerTotal / customerOrders.length) * 100) / 100;
 
-// ——— Aba 3 — Réguas ———
+// --- Aba 3: Réguas ---
 export const journey = {
   pageLabel: 'Régua',
-  title: 'Reposição — Kit Refil',
+  title: 'Reposição: Kit Refil',
   status: 'Ligada',
   pause: 'Pausar régua',
   trigger: { type: 'Gatilho', text: 'Quando estiver perto da próxima compra prevista' },
@@ -194,16 +194,16 @@ export const journey = {
   },
 } as const;
 
-// ——— Aba 4 — WhatsApp (PRD do app 14.10, com as variáveis da loja de exemplo) ———
+// --- Aba 4: WhatsApp (PRD do app 14.10, com as variáveis da loja de exemplo) ---
 export const whatsapp = {
   firstName: 'Maria',
   product: 'Kit Refil Lavanda',
   cycleDays: 45,
   pedidoFaturadoOptin: [
-    'Oi, Maria! Aqui é da Loja Exemplo.',
+    'Oi, Maria! Aqui é da Casa Lavanda.',
     'Seu pedido Kit Refil Lavanda foi faturado e já está seguindo para entrega.',
     'Se tiver qualquer problema com a entrega, é só responder esta mensagem.',
-    'Você também quer receber dicas e ofertas da Loja Exemplo por aqui?',
+    'Você também quer receber dicas e ofertas da Casa Lavanda por aqui?',
   ],
   optinButtons: ['Quero receber', 'Não, obrigado'],
   customerReply: 'Quero receber',
@@ -218,7 +218,7 @@ export const whatsapp = {
   daysLater: '42 dias depois',
 } as const;
 
-// ——— Aba 5 — Envio em massa (PRD do app 14.7) ———
+// --- Aba 5: Envio em massa (PRD do app 14.7) ---
 export const WHATSAPP_MARKETING_PRICE = 0.3217;
 
 export const bulkSend = {
@@ -232,7 +232,7 @@ export const bulkSend = {
   back: 'Voltar e revisar',
 } as const;
 
-// ——— Aba 6 — Bling (PRD do app 14.3) ———
+// --- Aba 6: Bling (PRD do app 14.3) ---
 export const onboarding = {
   steps: ['Boas-vindas', 'Conectar Bling', 'Importando', 'Canais', 'WhatsApp', 'Primeira régua'],
   current: 3,

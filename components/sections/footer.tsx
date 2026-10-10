@@ -5,14 +5,16 @@ import { ConsentLink } from '@/components/consent/consent-link';
 
 export function Footer() {
   const t = copy.footer;
-  // Sem CNPJ confirmado, a linha legal sai sem o trecho " · CNPJ {CNPJ_VIVAZ}" (PRD 17, pergunta 6).
-  const legal = site.cnpj ? fill(t.legal, { CNPJ_VIVAZ: site.cnpj }) : t.legal.split(' · CNPJ')[0];
+  // Sem CNPJ confirmado, a linha legal sai sem o CNPJ (PRD 17, pergunta 6).
+  const legal = site.cnpj ? `${t.legal} ${fill(t.cnpj, { CNPJ_VIVAZ: site.cnpj })}` : t.legal;
   return (
     <footer className="bg-warm-200 text-foreground">
-      <div className="mx-auto grid max-w-[1200px] gap-10 px-4 py-12 sm:px-6 lg:px-8 xl:grid-cols-[1fr_auto]">
+      <div className="mx-auto grid max-w-[1200px] gap-10 px-4 py-12 sm:px-6 lg:px-8 xl:grid-cols-[auto_1fr]">
         <div>
           <Logo height={32} />
-          <p className="text-ink-900 mt-4 text-lg font-bold">{copy.meta.slogan}</p>
+          <p className="text-ink-900 mt-4 text-lg font-bold xl:whitespace-nowrap">
+            {copy.meta.slogan}
+          </p>
         </div>
         <nav aria-label={copy.a11y.footerNav}>
           <ul className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-x-2 xl:justify-end">

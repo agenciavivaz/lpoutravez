@@ -292,7 +292,7 @@
   }
 }
 
-/* "Como funciona": laço que completa a volta e nó 1 que pulsa (ver how-it-works-loop.tsx). */
+/* "Como funciona": a seta de retorno se desenha (5 → 3) e o nó 3 pulsa uma vez (how-it-works-loop.tsx). */
 [data-loop-stage] [data-return-arc] {
   stroke-dashoffset: 0;
   transition: stroke-dashoffset var(--duration-celebration) var(--ease-brand);
@@ -307,7 +307,7 @@
   opacity: 0;
   transition-delay: 0ms;
 }
-[data-loop-stage='done'] :is([data-node='1'], [data-node-list='1']) {
+[data-loop-stage='done'] [data-node='3'] {
   animation: pulse-once var(--duration-celebration) var(--ease-brand) 500ms 1;
 }
 
@@ -318,5 +318,42 @@
   }
   40% {
     box-shadow: 0 0 0 12px rgb(232 93 74 / 0.28);
+  }
+}
+
+/* Arco do hero (PRD v2 11.3.1): desenha uma vez, 600 ms, depois que o H1 já está na tela. */
+.hero-arc {
+  stroke-dasharray: 100;
+  animation: loop-draw var(--duration-celebration) var(--ease-brand) 250ms both;
+}
+
+/* Faixa "Funciona com" no mobile (PRD v2 11.3.2): rolagem lenta, pausável, desligada em
+   prefers-reduced-motion (aí a lista quebra em linhas). No desktop é estática. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+[data-marquee-track] {
+  animation: marquee 40s linear infinite;
+}
+[data-marquee][data-paused='true'] [data-marquee-track],
+[data-marquee]:hover [data-marquee-track],
+[data-marquee]:focus-within [data-marquee-track] {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-marquee-track] {
+    animation: none;
+    flex-wrap: wrap;
+    width: auto;
+  }
+  [data-marquee-track] > ul {
+    flex-shrink: 1;
+    flex-wrap: wrap;
+  }
+  [data-marquee-track] > [aria-hidden='true'],
+  [data-marquee-pause] {
+    display: none;
   }
 }

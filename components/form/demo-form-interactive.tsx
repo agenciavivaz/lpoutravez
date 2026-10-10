@@ -6,7 +6,7 @@ import { copy, fill } from '@/lib/copy/pt-BR';
 import { maskPhoneInput } from '@/lib/phone';
 import { track } from '@/lib/analytics/events';
 import { captureAttribution, type Attribution } from '@/lib/utm';
-import { SIMULATOR_SNAPSHOT_KEY, ordersRange, type SimulatorInput } from '@/lib/simulator/calc';
+import { CALCULATOR_SNAPSHOT_KEY, ordersRange, type CalculatorSnapshot } from '@/lib/calculator';
 import {
   validateContact,
   validateStore,
@@ -17,6 +17,7 @@ import {
 import { submitContact, submitStore } from '@/actions/demo';
 import { ContactStep, EMPTY_CONTACT, EMPTY_STORE, StoreStep } from './steps';
 import { CalendarStep, type BookingInfo } from './calendar-step';
+import { ERP_OTHER_EVENT, ERP_OTHER_KEY } from '@/components/sections/erp-other-link';
 
 type Step = 'contact' | 'store' | 'calendar';
 
@@ -34,15 +35,13 @@ const THANK_YOU_KEY = 'ov_demo_thank_you';
 
 const FIELD_ORDER = {
   contact: ['name', 'whatsapp', 'email', 'consent'],
-  store: ['storeName', 'marketplaces', 'ordersRange', 'erp'],
+  store: ['erp', 'ordersRange'],
 } as const;
 const FIELD_ID: Record<string, string> = {
   name: 'demo-name',
   whatsapp: 'demo-whatsapp',
   email: 'demo-email',
   consent: 'demo-consent',
-  storeName: 'demo-store',
-  marketplaces: 'demo-marketplaces',
   ordersRange: 'demo-orders',
   erp: 'demo-erp',
 };
@@ -82,7 +81,8 @@ export function DemoFormInteractive() {
   const [pending, setPending] = useState(false);
   const [formError, setFormError] = useState<string>();
   const [announce, setAnnounce] = useState('');
-  const simulator = useRef<SimulatorInput | null>(null);
+  /** Campos ocultos vindos da calculadora: calc_pedidos, calc_ticket, calc_categoria. */
+  const calculator = useRef<CalculatorSnapshot | null>(null);
   const attribution = useRef<Attribution>({});
   const started = useRef(false);
   const restored = useRef(false);
@@ -100,17 +100,28 @@ export function DemoFormInteractive() {
     } else {
       setRequestId(crypto.randomUUID());
     }
-    const applySnapshot = (snapshot: SimulatorInput | null) => {
+    const applySnapshot = (snapshot: CalculatorSnapshot | null) => {
       if (!snapshot) return;
-      simulator.current = snapshot;
+      calculator.current = snapshot;
       setStore((s) => ({ ...s, ordersRange: ordersRange(snapshot.orders) }));
     };
-    applySnapshot(readJson<SimulatorInput>(sessionStorage, SIMULATOR_SNAPSHOT_KEY));
+    applySnapshot(readJson<CalculatorSnapshot>(sessionStorage, CALCULATOR_SNAPSHOT_KEY));
     const onSnapshot = (event: Event) =>
-      applySnapshot((event as CustomEvent<SimulatorInput>).detail);
-    window.addEventListener('ov:simulator-snapshot', onSnapshot);
+      applySnapshot((event as CustomEvent<CalculatorSnapshot>).detail);
+    window.addEventListener('ov:calculator-snapshot', onSnapshot);
+    // "Usa outro sistema? Me conta qual" (Integrações) já marca o ERP como "Outro".
+    const applyErpOther = () => setStore((s) => ({ ...s, erp: 'outro' }));
+    try {
+      if (sessionStorage.getItem(ERP_OTHER_KEY)) applyErpOther();
+    } catch {
+      // sessionStorage indisponível: segue sem pré-preencher.
+    }
+    window.addEventListener(ERP_OTHER_EVENT, applyErpOther);
     restored.current = true;
-    return () => window.removeEventListener('ov:simulator-snapshot', onSnapshot);
+    return () => {
+      window.removeEventListener('ov:calculator-snapshot', onSnapshot);
+      window.removeEventListener(ERP_OTHER_EVENT, applyErpOther);
+    };
   }, []);
 
   useEffect(() => {
@@ -157,7 +168,7 @@ export function DemoFormInteractive() {
         if (Object.keys(result.errors).length === 0) setFormError(copy.form.ui.errors.generic);
         return focusFirstError('contact', result.errors);
       }
-      track({ event: 'demo_form_step1' });
+      track({ event: 'form_step1_submit' });
       goTo('store');
     } catch {
       setFormError(copy.form.ui.errors.generic);
@@ -173,30 +184,14 @@ export function DemoFormInteractive() {
     if (Object.keys(errors).length > 0) return focusFirstError('store', errors);
     setPending(true);
     try {
-      const result = await submitStore(contact, store, simulator.current, meta());
+      const result = await submitStore(contact, store, calculator.current, meta());
       if (!result.ok) {
         setStoreErrors(result.errors);
         if (Object.keys(result.errors).length === 0) setFormError(copy.form.ui.errors.generic);
         return focusFirstError('store', result.errors);
       }
-      const qualified = result.next === 'calendar';
-      track({
-        event: 'demo_form_step2',
-        orders_range: store.ordersRange,
-        erp: store.erp,
-        qualified,
-      });
-      if (qualified) {
-        goTo('calendar');
-      } else {
-        track({ event: 'demo_waitlist', erp: store.erp });
-        const label =
-          store.erp === 'outro' && store.erpOther.trim()
-            ? store.erpOther.trim()
-            : (copy.form.step2.erpOptions.find((o) => o.value === store.erp)?.label ?? '');
-        sessionStorage.removeItem(STORAGE_KEY);
-        router.push(`/lista-de-espera?erp=${encodeURIComponent(label)}`);
-      }
+      track({ event: 'form_step2_submit', orders_range: store.ordersRange, erp: store.erp });
+      goTo('calendar');
     } catch {
       setFormError(copy.form.ui.errors.generic);
     } finally {
@@ -259,16 +254,6 @@ export function DemoFormInteractive() {
               setStore((s) => ({ ...s, [field]: value }));
               if (storeErrors[field]) setStoreErrors((e) => ({ ...e, [field]: undefined }));
             },
-            onToggleMarketplace: (value) => {
-              setStore((s) => ({
-                ...s,
-                marketplaces: s.marketplaces.includes(value)
-                  ? s.marketplaces.filter((m) => m !== value)
-                  : [...s.marketplaces, value],
-              }));
-              if (storeErrors.marketplaces)
-                setStoreErrors((e) => ({ ...e, marketplaces: undefined }));
-            },
             onBack: () => goTo('contact'),
             onSubmit: onStoreSubmit,
           }}
@@ -280,7 +265,7 @@ export function DemoFormInteractive() {
             name: contact.name,
             email: contact.email,
             whatsapp: contact.whatsapp,
-            store: store.storeName,
+            store: store.site,
             requestId,
           }}
           onBooked={onBooked}
